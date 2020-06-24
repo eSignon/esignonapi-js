@@ -70,7 +70,6 @@ async function getEsignonAccessToken() {
     if(res.header.result_code == '00') {
         accessToken = res.body.access_token;
         console.log('accessToken', accessToken);
-        startEsignonContract();
 
     //Fail
     } else {
