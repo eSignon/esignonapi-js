@@ -44,7 +44,7 @@ getAccessToken(:clientId, :companyId, :email, :password);
   - Type: `String`
   - 클라이언트 아이디
   - (결제전 테스트 고객) *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
-  - (API요금제를 결제한 고객)발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat 또는 전화 02-6299-5926
+  - (API요금제를 결제한 고객) 발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat 또는 전화 02-6299-5926
 
 - **companyId**
   - Type: `String`
@@ -63,7 +63,12 @@ getAccessToken(:clientId, :companyId, :email, :password);
 
 ```js
 async function getEsignonAccessToken() {
-    let res = await getAccessToken("*C9E7513F88CF918AC0C393B3CF14F9CF26F70017", "testapi", "guide@esignon.net", "guide12345*");
+    let res = await getAccessToken(
+        "*C9E7513F88CF918AC0C393B3CF14F9CF26F70017" //cliendId
+      , "testapi"                                   //companyId
+      , "guide@esignon.net"                         //email
+      , "guide12345*"                               //password
+    );
     console.log('res', res);
 
     //Success
