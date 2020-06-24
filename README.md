@@ -40,25 +40,21 @@ API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
 getAccessToken(:clientId, :companyId, :email, :password);
 ```
 
-- **clientId**
+- **clientId 클라이언트 아이디**
   - Type: `String`
-  - 클라이언트 아이디
-  - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
+    - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
   - `(API요금제를 결제한 고객)` 발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat 또는 전화 02-6299-5926
 
-- **companyId**
+- **companyId 회사 아이디**
   - Type: `String`
-  - 회사 아이디
-  - `(결제전 테스트 고객)` testapi
+    - `(결제전 테스트 고객)` testapi
 
-- **email**
+- **email 이싸인온 가입 이메일(아이디)**
   - Type: `String`
-  - 이싸인온 가입 이메일(아이디)
 
-- **password**
+- **password 이싸인온 계정 비밀번호**
   - Type: `String`
-  - 이싸인온 아이디 비밀번호
-
+  
 #### Example
 
 ```js
