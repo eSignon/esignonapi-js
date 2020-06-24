@@ -12,7 +12,7 @@
 ```text
 dist/
 ├── esignonapi-js.min.js   (compressed)
-├── esignonapi-js.js (CommonJS, default)
+└── esignonapi-js.js (CommonJS, default)
 ```
 
 ## Getting started
@@ -29,6 +29,9 @@ In browser:
 
 ### Usage
 
+#### 0. 임시회원가입
+API를 이용하기 testapi 회사에 멤버로 가입합니다.[멤버가입](https://esignon.net)
+
 #### 1. 인증토큰발행
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
 
@@ -36,13 +39,16 @@ API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
 getAccessToken(:clientId, :companyId, :email, :password);
 ```
 
-- **cliendId**
+- **clientId**
   - Type: `String`
   - 클라이언트 아이디
+  - (결제전 테스트 고객) *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
+  - (API요금제를 결제한 고객)발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat 또는 전화 02-6299-5926
 
 - **companyId**
   - Type: `String`
   - 회사 아이디
+  - (결제전 테스트 고객) testapi
 
 - **email**
   - Type: `String`
