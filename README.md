@@ -1,6 +1,6 @@
 # esignonapi-js.js
 
-> JavaScript eSignon API Library
+> eSignon API JavaScript Library
 
 - [eSignon Homepage](https://esignon.net)
 - [eSignon Service Website](https://docs.esignon.net)
@@ -30,7 +30,8 @@ In browser:
 ### Usage
 
 #### 0. 임시회원가입
-API를 이용하기 testapi 회사에 멤버로 가입합니다.[멤버가입](https://esignon.net)
+API를 이용하기 testapi 회사에 멤버로 가입합니다.
+[멤버가입하기](https://esignon.net)
 
 #### 1. 인증토큰발행
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
@@ -62,7 +63,7 @@ getAccessToken(:clientId, :companyId, :email, :password);
 
 ```js
 async function getEsignonAccessToken() {
-    let res = await getAccessToken(:clientId, :companyId, :email, :password);
+    let res = await getAccessToken("*C9E7513F88CF918AC0C393B3CF14F9CF26F70017", "testapi", "guide@esignon.net", "guide12345*");
     console.log('res', res);
 
     //Success
