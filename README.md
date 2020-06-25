@@ -119,12 +119,13 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
 - **docId**
   - Type: `String`
   - 서식아이디
-  - https://docs.esignon.net에 로그인 하신후 서식메뉴 목록에서 서식아이디를 확인할 수 있습니다.
+  - https://docs.esignon.net에 로그인 후 서식메뉴 목록에서 서식아이디를 확인할 수 있습니다.
 
 - **playerList**
   - Type: `Array`
   - 문서 작성자
-  - 여러명일 경우 배열에 앞선 사람이 먼서 작성하게 됩니다.
+  - 작성자가 여러명인 경우 배열에 앞선 사람이 먼저 작성하게 됩니다.
+  - 작성자수는 서식의 문서작성자 수와 일치해야 하며 서식메뉴 목록에서 확인할 수 있습니다.
   - 1명이 작성할 경우
     ```js
       let playerList = new Array();
