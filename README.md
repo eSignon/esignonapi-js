@@ -31,7 +31,7 @@ In browser:
 
 #### 0. 임시회원가입
 API를 이용하기 testapi 회사에 멤버로 가입합니다.
-[멤버가입하기](https://esignon.net)
+<a href="https://docs.esignon.net/testapi/invite" target="_blank">멤버가입하기</a>
 
 #### 1. 인증토큰발행
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
