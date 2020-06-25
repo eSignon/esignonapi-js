@@ -91,8 +91,11 @@ async function getEsignonAccessToken() {
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
 
 ```js
-getAccessToken(:clientId, :companyId, :email, :password);
+startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, :docId, :playerList);
 ```
+- **accessToken**
+  - Type: `String`
+  - 인증토큰
 
 - **clientId**
   - Type: `String`
@@ -105,13 +108,21 @@ getAccessToken(:clientId, :companyId, :email, :password);
   - 회사 아이디
   - `(결제전 테스트 고객)` testapi
 
-- **email**
+- **senderEmail**
   - Type: `String`
-  - 이싸인온 가입 이메일(아이디)
+  - 보내는 사람 이메일(이싸인온 가입 이메일)
 
-- **password**
+- **workflowName**
   - Type: `String`
-  - 이싸인온 아이디 비밀번호
+  - 보내는 문서(계약)명
+
+  - **docId**
+  - Type: `String`
+  - 서식아이디
+
+  - **playerList**
+  - Type: `Array`
+  - 문서 작성자
 
 #### Example
 
