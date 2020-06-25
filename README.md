@@ -134,7 +134,7 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - Type: `Array`
   - 문서 작성자
   - 작성자가 여러명인 경우 배열에 앞선 사람이 먼저 작성하게 됩니다.
-  - 작성자수는 서식의 문서작성자 수와 일치해야 하며 서식메뉴 목록에서 확인할 수 있습니다.
+  - 작성자수는 서식의 문서작성자 수와 일치해야 하며 서식의 문서작성자 수는 서식메뉴 목록에서 확인할 수 있습니다.
   - 1명이 작성할 경우
     ```js
       let playerList = new Array();
@@ -194,7 +194,7 @@ async function startEsignonContract() {
       playerList.push(new StartSimplePlayer('guide@esignon.net', '이싸인온'); 
 
       //두번째 작성자(카카오톡으로 전달받음) - 휴대폰본인인증 요청
-      playerList.push(new StartSimplePlayerCertMobile('01012341234', '홍길동', '01012341234')); 
+      playerList.push(new StartSimplePlayerCertMobile('0101231234', '홍길동', '0101231234')); 
 
       //세번째 작성자(이메일로 전달받음) - 비밀번호인증 요청
       playerList.push(new StartSimplePlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리'));
