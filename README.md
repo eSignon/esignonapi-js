@@ -126,12 +126,12 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - 문서 작성자
   - 여러명일 경우 배열에 앞선 사람이 먼서 작성하게 됩니다.
   - 1명이 작성할 경우
-  - ```js
+    ```js
       let playerList = new Array();
       playerList.push(new StartSimplePlayer(:email, :name));
     ```  
   - 2명이 작성할 경우
-  - ```js
+    ```js
       let playerList = new Array();
       playerList.push(new StartSimplePlayer(:email, :name)); //첫번째 작성자는 email로 계약서를 받음
       playerList.push(new StartSimplePlayer(:mobile, :name)); //두번째 작성자는 휴대폰번호로 계약서를 받음
