@@ -142,7 +142,7 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - 1명이 작성할 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayer(
+      playerList.push(new SetPlayer(
           :emailOrMobileNo, //이메일주소 또는 휴대폰번호
           :name             //작성자 이름
       ));
@@ -150,13 +150,13 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - 2명이 작성할 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayer(:emailOrMobileNo, :name)); //첫번째 작성자
-      playerList.push(new StartSimplePlayer(:emailOrMobileNo, :name)); //두번째 작성자
+      playerList.push(new SetPlayer(:emailOrMobileNo, :name)); //첫번째 작성자
+      playerList.push(new SetPlayer(:emailOrMobileNo, :name)); //두번째 작성자
     ```  
   - 작성자에게 휴대폰 본인 인증을 요청하는 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayerCertMobile(
+      playerList.push(new SetPlayerCertMobile(
         :emailOrMobileNo,   //이메일주소 또는 휴대폰번호
         :name,              //작성자 이름
         :certMobileNumber   //휴대폰본인인증 - 휴대폰번호
@@ -165,7 +165,7 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - 작성자에게 비밀번호 인증을 요청하는 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayerCertPassword(
+      playerList.push(new SetPlayerCertPassword(
         :emailOrMobileNo,   //이메일주소 또는 휴대폰번호
         :name,              //작성자 이름
         :certPassword,      //비밀번호인증 - 비밀번호
@@ -175,7 +175,7 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - 작성자에게 휴대폰 본인 인증과, 비밀번호 인증을 요청하는 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayerCertMobilePassword(
+      playerList.push(new SetPlayerCertMobilePassword(
         :emailOrMobileNo,   //이메일주소 또는 휴대폰번호
         :name,              //작성자 이름
         :certMobileNumber,  //휴대폰본인인증 - 휴대폰번호
@@ -195,16 +195,16 @@ async function startEsignonContract() {
       let playerList = new Array();
 
       //첫번째 작성자(이메일로 전달받음)
-      playerList.push(new StartSimplePlayer('guide@esignon.net', '이싸인온'); 
+      playerList.push(new SetPlayer('guide@esignon.net', '이싸인온'); 
 
       //두번째 작성자(카카오톡으로 전달받음) - 휴대폰본인인증 요청
-      playerList.push(new StartSimplePlayerCertMobile('0101231234', '홍길동', '0101231234')); 
+      playerList.push(new SetPlayerCertMobile('0101231234', '홍길동', '0101231234')); 
 
       //세번째 작성자(이메일로 전달받음) - 비밀번호인증 요청
-      playerList.push(new StartSimplePlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리'));
+      playerList.push(new SetPlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리'));
 
       //계약(문서) 전송
-      const res = await startContract(
+      const res = await startNonfaceWorkflow(
         accessToken,                                  //인증토큰
         '*C9E7513F88CF918AC0C393B3CF14F9CF26F70017',  //클라이언트아이디
         'testapi',                                    //회사아이디

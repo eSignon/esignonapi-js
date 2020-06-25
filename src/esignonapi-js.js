@@ -67,22 +67,22 @@ const RequestBodyAccessToken = function(clientId, email, password) {
  * [TK Yoon 2020-06-23 13:43:57] */
 const getAccessToken = async function(clientId, companyId, email, password) {
     if(isNull(clientId)) {
-        alert('clientId value is required.');
+        alert('getAccessToken.clientId value is required.');
         return;
     }
 
     if(isNull(companyId)) {
-        alert('companyId value is required.');
+        alert('getAccessToken.companyId value is required.');
         return;
     }
 
     if(isNull(email)) {
-        alert('email value is required.');
+        alert('getAccessToken.email value is required.');
         return;
     }
 
     if(isNull(password)) {
-        alert('password value is required.');
+        alert('getAccessToken.password value is required.');
         return;
     }
 
@@ -118,7 +118,82 @@ const RequestBodyStartSimple = function(clientId, companyId, email, workflowName
 }
 
 /** 작성할 사람 설정 [TK Yoon 2020-06-23 16:00:40] */
-const StartSimplePlayer = function(emailOrMobileNo, name, certMobileNumber, certPassword, certPasswordHint, language) {
+const SetPlayer = function(emailOrMobileNo, name, language) {
+    if(isNull(emailOrMobileNo)){
+        throw 'SetPlayer.emailOrMobileNo value is required.';
+    }
+
+    if(isNull(name)){
+        throw 'SetPlayer.name value is required.';
+    }
+
+    this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
+    this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
+    this.name = name;                                       //필수 : 받는 사람 이름
+    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
+}
+
+/** 작성할 사람 설정 - 휴대폰인증 [TK Yoon 2020-06-25 13:21:19] */
+const SetPlayerCertMobile = function(emailOrMobileNo, name, certMobileNumber, language) {
+    if(isNull(emailOrMobileNo)){
+        throw 'SetPlayerCertMobile.emailOrMobileNo value is required.';
+    }
+
+    if(isNull(name)){
+        throw 'SetPlayerCertMobile.name value is required.';
+    }
+
+    if(isNull(certMobileNumber)){
+        throw 'SetPlayerCertMobile.certMobileNumber value is required.';
+    }
+
+    this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
+    this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
+    this.name = name;                                       //필수 : 받는 사람 이름
+    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
+    this.mobile_number = certMobileNumber;                  //옵션 : 휴대폰 본인인증 휴대폰 번호
+}
+
+/** 작성할 사람 설정 - 비밀번호인증 [TK Yoon 2020-06-25 13:21:19] */
+const SetPlayerCertPassword = function(emailOrMobileNo, name, certPassword, certPasswordHint, language) {
+    if(isNull(emailOrMobileNo)){
+        throw 'SetPlayerCertPassword.emailOrMobileNo value is required.';
+    }
+
+    if(isNull(name)){
+        throw 'SetPlayerCertPassword.name value is required.';
+    }
+
+    if(isNull(certPassword)){
+        throw 'SetPlayerCertPassword.certPassword value is required.';
+    }
+
+    this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
+    this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
+    this.name = name;                                       //필수 : 받는 사람 이름
+    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
+    this.password = certPassword;                           //옵션 : 비밀번호 인증 비밀번호
+    this.password_hint = certPasswordHint;                  //옵션 : 비밀번호 인증 힌트
+}
+
+/** 작성할 사람 설정 - 휴대폰인증 + 비밀번호인증 [TK Yoon 2020-06-25 13:21:19] */
+const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNumber, certPassword, certPasswordHint, language) {
+    if(isNull(emailOrMobileNo)){
+        throw 'SetPlayerCertMobilePassword.emailOrMobileNo value is required.';
+    }
+
+    if(isNull(name)){
+        throw 'SetPlayerCertMobilePassword.name value is required.';
+    }
+
+    if(isNull(certMobileNumber)){
+        throw 'SetPlayerCertMobilePassword.certMobileNumber value is required.';
+    }
+
+    if(isNull(certPassword)){
+        throw 'SetPlayerCertMobilePassword.certPassword value is required.'
+    }
+
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
@@ -138,39 +213,39 @@ const StartSimplePlayer = function(emailOrMobileNo, name, certMobileNumber, cert
  * @param docId 서식아이디
  * @param playerList (Array) 작성하는 사람들
  *  [TK Yoon 2020-06-24 08:22:23] */
-const startContract = async function(accessToken, clientId, companyId, email, workflowName, docId, playerList) {
+const startNonfaceWorkflow = async function(accessToken, clientId, companyId, email, workflowName, docId, playerList) {
     if(isNull(accessToken)) {
-        alert('accessToken value is required.');
+        alert('startNonfaceWorkflow.accessToken value is required.');
         return;
     }
 
     if(isNull(clientId)) {
-        alert('clientId value is required.');
+        alert('startNonfaceWorkflow.clientId value is required.');
         return;
     }
 
     if(isNull(companyId)) {
-        alert('companyId value is required.');
+        alert('startNonfaceWorkflow.companyId value is required.');
         return;
     }
 
     if(isNull(email)) {
-        alert('email value is required.');
+        alert('startNonfaceWorkflow.email value is required.');
         return;
     }
 
     if(isNull(workflowName)) {
-        alert('workflowName value is required.');
+        alert('startNonfaceWorkflow.workflowName value is required.');
         return;
     }
 
     if(isNull(docId)) {
-        alert('docId value is required.');
+        alert('startNonfaceWorkflow.docId value is required.');
         return;
     }
 
     if(isNull(playerList)) {
-        alert('playerList value is required.');
+        alert('startNonfaceWorkflow.playerList value is required.');
         return;
     }
 
