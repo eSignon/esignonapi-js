@@ -36,7 +36,8 @@ API를 이용하기에 앞서 이싸인온 멤버에 가입해야 합니다.
 <a href="https://docs.esignon.net/testapi/invite" target="_blank">멤버가입하기</a>
 
 #### 1. 인증토큰발행
-API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
+API를 이용하기 위한 사용자 인증 토큰을 발행합니다.  
+인증토큰은 인증토큰 발행 API를 제외한 모든 API를 호출할때 Request heaer에 넣어줘야만 합니다.
 
 ```js
 getAccessToken(:clientId, :companyId, :email, :password);
