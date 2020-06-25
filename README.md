@@ -101,10 +101,10 @@ async function getEsignonAccessToken() {
 ```
 
 #### 2. 비대면 계약 시작
-API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
+문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.
 
 ```js
-startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, :docId, :playerList);
+startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, :docId, :playerList);
 ```
 - **accessToken**
   - Type: `String`
