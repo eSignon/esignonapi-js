@@ -48,7 +48,7 @@ getAccessToken(:clientId, :companyId, :email, :password);
   - Type: `String`
   - 클라이언트 아이디
   - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
-  - `(API요금제를 결제한 고객)` 발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat 또는 전화 02-6299-5926
+  - `(API요금제를 결제한 고객)` [발급요청 카카오톡(Ctrl + Click!)](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
 
 - **companyId**
   - Type: `String`
@@ -116,7 +116,7 @@ startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflo
   - Type: `String`
   - 클라이언트 아이디
   - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
-  - `(API요금제를 결제한 고객)` 발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat 또는 전화 02-6299-5926
+  - `(API요금제를 결제한 고객)` [발급요청 카카오톡(Ctrl + Click!)](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
 
 - **companyId**
   - Type: `String`
@@ -135,7 +135,7 @@ startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflo
   - Type: `String`
   - 서식아이디
   - https://docs.esignon.net에 로그인 후 서식메뉴에서 서식을 생성하거나, 목록에서 서식아이디를 확인할 수 있습니다.
-  - [서식만들기 동영상 확인](https://youtu.be/Hwngs2Fqy3E)
+  - [비대면 서식만드는 방법 동영상 확인(Ctrl + Click!)](https://youtu.be/Hwngs2Fqy3E)
 
 - **playerList**
   - Type: `Array`
