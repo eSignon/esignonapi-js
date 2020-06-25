@@ -116,35 +116,48 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - Type: `String`
   - 보내는 문서(계약)명
 
-  - **docId**
+- **docId**
   - Type: `String`
   - 서식아이디
+  - https://docs.esignon.net에 로그인 하신후 서식메뉴 목록에서 서식아이디를 확인할 수 있습니다.
 
-  - **playerList**
+- **playerList**
   - Type: `Array`
   - 문서 작성자
+  - 여러명일 경우 배열에 앞선 사람이 먼서 작성하게 됩니다.
+  - 1명이 작성할 경우
+  - ```js
+      let playerList = new Array();
+      playerList.push(new StartSimplePlayer(:email, :name));
+    ```  
+  - 2명이 작성할 경우
+  - ```js
+      let playerList = new Array();
+      playerList.push(new StartSimplePlayer(:email, :name)); //첫번째 작성자는 email로 계약서를 받음
+      playerList.push(new StartSimplePlayer(:mobile, :name)); //두번째 작성자는 휴대폰번호로 계약서를 받음
+    ```  
 
 #### Example
 
 ```js
-async function getEsignonAccessToken() {
-    let res = await getAccessToken(
-        "*C9E7513F88CF918AC0C393B3CF14F9CF26F70017" //cliendId
-      , "testapi"                                   //companyId
-      , "guide@esignon.net"                         //email
-      , "guide12345*"                               //password
-    );
-    console.log('res', res);
+async function startEsignonContract() {
+    //작성할 사람 설정
+    let playerList = new Array();
+    playerList.push(new StartSimplePlayer('tkyoon@jcone.co.kr', '', '', '12345', '힌트')); //기본 + 비밀번호인증
 
+    //계약(문서) 전송
+    let res = await startContract(accessToken, clientId, companyId, 'tkyoon@jcone.co.kr', '휴대폰 인증 계약서 제목이 들어갑니다.', '2870', playerList);
+
+    //결과값
+    console.log('res', res);
+    
     //Success
     if(res.header.result_code == '00') {
-        accessToken = res.body.access_token;
-        console.log('accessToken', accessToken);
+        
 
     //Fail
     } else {
         //TODO Something
-        alert(res.header.result_msg);
 
     }
 }
