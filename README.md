@@ -33,7 +33,8 @@ In browser:
 API를 이용하기에 앞서 이싸인온 멤버에 가입해야 합니다.  
 이미 API 요금제에 가입된 회원은 다음단계로 진행하세요.  
 가입하지 않은 고객은 testapi회사 테스트계정에 멤버로 가입하기 위해 아래 링크를 클릭해주세요.  
-<a href="https://docs.esignon.net/testapi/invite" target="_blank">멤버가입하기</a>
+<a href="https://docs.esignon.net/testapi/invite" target="_blank">멤버가입하기</a>  
+링크를 통해 가입하셨다면 로그인할때 회사이름에 `testapi`를 입력해주세요.
 
 #### 1. 인증토큰발행
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.  
@@ -82,8 +83,8 @@ async function getEsignonAccessToken() {
 
     //Success
     if(res.header.result_code == '00') {
-      console.log('accessToken', accessToken);
       accessToken = res.body.access_token;        //인증토큰
+      console.log('accessToken', accessToken);
 
     //Fail
     } else {
@@ -133,7 +134,8 @@ startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflo
 - **docId**
   - Type: `String`
   - 서식아이디
-  - https://docs.esignon.net에 로그인 후 서식메뉴 목록에서 서식아이디를 확인할 수 있습니다.
+  - https://docs.esignon.net에 로그인 후 서식메뉴에서 서식을 생성하거나, 목록에서 서식아이디를 확인할 수 있습니다.
+  - [서식만들기 동영상 확인](https://youtu.be/Hwngs2Fqy3E)
 
 - **playerList**
   - Type: `Array`
