@@ -128,13 +128,46 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
   - 1명이 작성할 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayer(:email, :name));
+      playerList.push(new StartSimplePlayer(
+          :emailOrMobileNo, //이메일주소 또는 휴대폰번호
+          :name             //작성자 이름
+      ));
     ```  
   - 2명이 작성할 경우
     ```js
       let playerList = new Array();
-      playerList.push(new StartSimplePlayer(:email, :name)); //첫번째 작성자는 email로 계약서를 받음
-      playerList.push(new StartSimplePlayer(:mobile, :name)); //두번째 작성자는 휴대폰번호로 계약서를 받음
+      playerList.push(new StartSimplePlayer(:emailOrMobileNo, :name)); //첫번째 작성자
+      playerList.push(new StartSimplePlayer(:emailOrMobileNo, :name)); //두번째 작성자
+    ```  
+  - 작성자에게 휴대폰 본인 인증을 요청하는 경우
+    ```js
+      let playerList = new Array();
+      playerList.push(new StartSimplePlayerCertMobile(
+        :emailOrMobileNo,   //이메일주소 또는 휴대폰번호
+        :name,              //작성자 이름
+        :certMobileNumber   //휴대폰본인인증 - 휴대폰번호
+      ));
+    ```  
+  - 작성자에게 비밀번호 인증을 요청하는 경우
+    ```js
+      let playerList = new Array();
+      playerList.push(new StartSimplePlayerCertPassword(
+        :emailOrMobileNo,   //이메일주소 또는 휴대폰번호
+        :name,              //작성자 이름
+        :certPassword,      //비밀번호인증 - 비밀번호
+        :certPasswordHint   //비밀번호인증 - 힌트
+      ));
+    ```  
+  - 작성자에게 휴대폰 본인 인증과, 비밀번호 인증을 요청하는 경우
+    ```js
+      let playerList = new Array();
+      playerList.push(new StartSimplePlayerCertMobilePassword(
+        :emailOrMobileNo,   //이메일주소 또는 휴대폰번호
+        :name,              //작성자 이름
+        :certMobileNumber,  //휴대폰본인인증 - 휴대폰번호
+        :certPassword,      //비밀번호인증 - 비밀번호
+        :certPasswordHint   //비밀번호인증 - 힌트
+      ));
     ```  
 
 #### Example
