@@ -189,9 +189,15 @@ async function startEsignonContract() {
 
       //작성할 사람 설정
       let playerList = new Array();
-      playerList.push(new StartSimplePlayer('guide@esignon.net', '이싸인온'); //첫번째 작성자(이메일로 전달받음)
-      playerList.push(new StartSimplePlayerCertMobile('01012341234', '홍길동', '01012341234')); //두번째 작성자(카카오톡으로 전달받음) - 휴대폰본인인증 요청
-      playerList.push(new StartSimplePlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리')); //세번째 작성자(이메일롤 전달받음) - 비밀번호인증 요청
+
+      //첫번째 작성자(이메일로 전달받음)
+      playerList.push(new StartSimplePlayer('guide@esignon.net', '이싸인온'); 
+
+      //두번째 작성자(카카오톡으로 전달받음) - 휴대폰본인인증 요청
+      playerList.push(new StartSimplePlayerCertMobile('01012341234', '홍길동', '01012341234')); 
+
+      //세번째 작성자(이메일로 전달받음) - 비밀번호인증 요청
+      playerList.push(new StartSimplePlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리'));
 
       //계약(문서) 전송
       const res = await startContract(
