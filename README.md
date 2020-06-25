@@ -65,25 +65,29 @@ getAccessToken(:clientId, :companyId, :email, :password);
 
 ```js
 async function getEsignonAccessToken() {
+
   try {
     
-    let res = await getAccessToken(
+    //API 호출
+    const res = await getAccessToken(
         "*C9E7513F88CF918AC0C393B3CF14F9CF26F70017" //cliendId
       , "testapi"                                   //companyId
       , "guide@esignon.net"                         //email
       , "guide12345*"                               //password
     );
+
+    //결과값
     console.log('res', res);
 
     //Success
     if(res.header.result_code == '00') {
-        accessToken = res.body.access_token;
-        console.log('accessToken', accessToken);
+      console.log('accessToken', accessToken);
+      accessToken = res.body.access_token;        //인증토큰
 
     //Fail
     } else {
-        //TODO Something
-        alert(res.header.result_msg);
+      //TODO Something
+      alert(res.header.result_msg);
 
     }
 
@@ -215,11 +219,13 @@ async function startEsignonContract() {
       
       //Success
       if(res.header.result_code == '00') {
+        //TODO Something
           
 
       //Fail
       } else {
-          //TODO Something
+        //TODO Something
+        alert(res.header.result_msg);
 
       }
 
