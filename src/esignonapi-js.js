@@ -68,23 +68,19 @@ const RequestBodyAccessToken = function(clientId, email, password) {
  * [TK Yoon 2020-06-23 13:43:57] */
 const getAccessToken = async function(clientId, companyId, email, password) {
     if(isNull(clientId)) {
-        alert('getAccessToken.clientId value is required.');
-        return;
+        throw 'getAccessToken.clientId value is required.';
     }
 
     if(isNull(companyId)) {
-        alert('getAccessToken.companyId value is required.');
-        return;
+        throw 'getAccessToken.companyId value is required.';
     }
 
     if(isNull(email)) {
-        alert('getAccessToken.email value is required.');
-        return;
+        throw 'getAccessToken.email value is required.';
     }
 
     if(isNull(password)) {
-        alert('getAccessToken.password value is required.');
-        return;
+        throw 'getAccessToken.password value is required.';
     }
 
     //API호출
@@ -216,38 +212,31 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
  *  [TK Yoon 2020-06-24 08:22:23] */
 const startNonfaceWorkflow = async function(accessToken, clientId, companyId, email, workflowName, docId, playerList) {
     if(isNull(accessToken)) {
-        alert('startNonfaceWorkflow.accessToken value is required.');
-        return;
+        throw 'startNonfaceWorkflow.accessToken value is required.';
     }
 
     if(isNull(clientId)) {
-        alert('startNonfaceWorkflow.clientId value is required.');
-        return;
+        throw 'startNonfaceWorkflow.clientId value is required.';
     }
 
     if(isNull(companyId)) {
-        alert('startNonfaceWorkflow.companyId value is required.');
-        return;
+        throw 'startNonfaceWorkflow.companyId value is required.';
     }
 
     if(isNull(email)) {
-        alert('startNonfaceWorkflow.email value is required.');
-        return;
+        throw 'startNonfaceWorkflow.email value is required.';
     }
 
     if(isNull(workflowName)) {
-        alert('startNonfaceWorkflow.workflowName value is required.');
-        return;
+        throw 'startNonfaceWorkflow.workflowName value is required.';
     }
 
     if(isNull(docId)) {
-        alert('startNonfaceWorkflow.docId value is required.');
-        return;
+        throw 'startNonfaceWorkflow.docId value is required.';
     }
 
     if(isNull(playerList)) {
-        alert('startNonfaceWorkflow.playerList value is required.');
-        return;
+        throw 'startNonfaceWorkflow.playerList value is required.';
     }
 
     //작성자 순서 자동 등록
