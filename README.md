@@ -34,7 +34,9 @@ API를 이용하기에 앞서 이싸인온 멤버에 가입해야 합니다.
 이미 API 요금제에 가입된 회원은 다음단계로 진행하세요.  
 가입하지 않은 고객은 testapi회사 테스트계정에 멤버로 가입하기 위해 아래 링크를 클릭해주세요.  
 <a href="https://docs.esignon.net/testapi/invite" target="_blank">멤버가입하기</a>  
-링크를 통해 가입하셨다면 로그인할때 회사이름에 `testapi`를 입력해주세요.
+> 링크를 통해 가입하셨다면 로그인할때 회사이름에 `testapi`를 입력해주세요.
+
+***
 
 #### 1. 인증토큰발행
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.  
@@ -48,7 +50,7 @@ getAccessToken(:clientId, :companyId, :email, :password);
   - Type: `String`
   - 클라이언트 아이디
   - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
-  - `(API요금제를 결제한 고객)` [발급요청 카카오톡(Ctrl + Click!)](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
+  - `(API요금제를 결제한 고객)` [발급요청 카카오톡 상담](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
 
 - **companyId**
   - Type: `String`
@@ -102,6 +104,8 @@ async function getEsignonAccessToken() {
 }
 ```
 
+***
+
 #### 2. 비대면 계약 시작
 문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.
 
@@ -116,7 +120,7 @@ startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflo
   - Type: `String`
   - 클라이언트 아이디
   - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
-  - `(API요금제를 결제한 고객)` [발급요청 카카오톡(Ctrl + Click!)](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
+  - `(API요금제를 결제한 고객)` [발급요청 카카오톡 상담](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
 
 - **companyId**
   - Type: `String`
@@ -135,7 +139,7 @@ startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflo
   - Type: `String`
   - 서식아이디
   - https://docs.esignon.net에 로그인 후 서식메뉴에서 서식을 생성하거나, 목록에서 서식아이디를 확인할 수 있습니다.
-  - [비대면 서식만드는 방법 동영상 확인(Ctrl + Click!)](https://youtu.be/Hwngs2Fqy3E)
+  - [비대면 서식만드는 방법 동영상 확인](https://youtu.be/Hwngs2Fqy3E)
 
 - **playerList**
   - Type: `Array`
@@ -240,6 +244,8 @@ async function startEsignonContract() {
     
 }
 ```
+
+***
 
 ## License
 
