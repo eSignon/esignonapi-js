@@ -90,7 +90,7 @@ async function getEsignonAccessToken() {
   } catch (error) {
     console.log(error);
     alert(error);
-    
+
   }
     
 }
@@ -180,9 +180,8 @@ startContract(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, 
       ));
     ```  
 
-#### Example 3명이 작성하는 문서를 보내는 경우
+#### Example) 3명이 작성하는 문서를 보내는 경우
 > 두번째 작성자는 휴대폰본인인증을 요청, 세번째 작성자는 비밀번호인증을 요청
-
 ```js
 async function startEsignonContract() {
     
@@ -192,17 +191,17 @@ async function startEsignonContract() {
       let playerList = new Array();
       playerList.push(new StartSimplePlayer('guide@esignon.net', '이싸인온'); //첫번째 작성자(이메일로 전달받음)
       playerList.push(new StartSimplePlayerCertMobile('01012341234', '홍길동', '01012341234')); //두번째 작성자(카카오톡으로 전달받음) - 휴대폰본인인증 요청
-      playerList.push(new StartSimplePlayerCertPassword('guide@esignon.net', '이싸인온', '19991024', '생년월일 6자리')); //세번째 작성자(이메일롤 전달받음) - 비밀번호인증 요청
+      playerList.push(new StartSimplePlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리')); //세번째 작성자(이메일롤 전달받음) - 비밀번호인증 요청
 
       //계약(문서) 전송
       const res = await startContract(
-        accessToken,                //인증토큰
-        clientId,                   //클라이언트아이디
-        companyId,                  //회사아이디
-        'tkyoon@jcone.co.kr',       //보내는 사람 이메일(이싸인온 가입자 아이디)
-        '계약서 제목이 들어갑니다.',  //문서(계약)명
-        '2870',                     //서식아이디
-        playerList                  //문서작성자
+        accessToken,                                  //인증토큰
+        '*C9E7513F88CF918AC0C393B3CF14F9CF26F70017',  //클라이언트아이디
+        'testapi',                                    //회사아이디
+        'tkyoon@jcone.co.kr',                         //보내는 사람 이메일(이싸인온 가입자 아이디)
+        '2020년 근로계약서_홍길동',                     //문서(계약)명
+        '2870',                                       //서식아이디
+        playerList                                    //문서작성자
       );
 
       //결과값
