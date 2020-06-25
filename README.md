@@ -40,7 +40,8 @@ API를 이용하기에 앞서 이싸인온 멤버에 가입해야 합니다.
 
 #### 1. 인증토큰발행
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.  
-인증토큰은 인증토큰 발행 API를 제외한 모든 API를 호출할때 Request heaer에 넣어줘야만 합니다.
+인증토큰은 인증토큰 발행 API를 제외한 모든 API를 호출할때 Request heaer에 넣어줘야만 합니다.  
+[REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/issued/token)
 
 ```js
 getAccessToken(:clientId, :companyId, :email, :password);
@@ -107,7 +108,8 @@ async function getEsignonAccessToken() {
 ***
 
 #### 2. 비대면 계약 시작
-문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.
+문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.  
+[REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart)
 
 ```js
 startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, :docId, :playerList);
