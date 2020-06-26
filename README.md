@@ -38,10 +38,10 @@ API를 이용하기에 앞서 이싸인온 멤버에 가입해야 합니다.
 
 ***
 
-#### 1. 인증토큰발행
+#### 1. 인증토큰 발급
 API를 이용하기 위한 사용자 인증 토큰을 발행합니다.  
-인증토큰은 인증토큰 발행 API를 제외한 모든 API를 호출할때 Request heaer에 넣어줘야만 합니다.  
-[REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/issued/token)
+인증토큰은 인증토큰 발행 API를 제외한 모든 API를 호출할때 Request header.Authoriaztion에 넣어줘야만 합니다.  
+[인증토큰 발급 REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/issued/token)
 
 ```js
 getAccessToken(:clientId, :companyId, :email, :password, :language);
@@ -78,7 +78,7 @@ async function getEsignonAccessToken() {
 
   try {
     
-    //API 호출
+    //Call API
     const res = await getAccessToken(
         "*C9E7513F88CF918AC0C393B3CF14F9CF26F70017" //cliendId
       , "testapi"                                   //companyId
@@ -87,12 +87,12 @@ async function getEsignonAccessToken() {
       , "ko"                                        //language(한국어:ko, English:en, 日本語:ja)
     );
 
-    //결과값
+    //Response
     console.log('res', res);
 
     //Success
     if(res.header.result_code == '00') {
-      accessToken = res.body.access_token;        //인증토큰
+      accessToken = res.body.access_token;        //access token
       console.log('accessToken', accessToken);
 
     //Fail
