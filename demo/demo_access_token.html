@@ -25,6 +25,7 @@
         .input {
             font-size: 20px;
             width: 550px;
+            height: 30px;
         }
 
         .title {
@@ -85,7 +86,7 @@
     <script src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
 
     <!-- eSignon API Javascript Library [TK Yoon 2020-06-26 08:59:11] -->
-    <script src="https://raw.githack.com/eSignon/esignonapi-js/master/src/esignonapi-js.js"></script>
+    <script src="https://rawcdn.githack.com/eSignon/esignonapi-js/097f2153f1cd10ed362a66b2dfa8756749466c7f/src/esignonapi-js.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -102,9 +103,12 @@
                 let companyId = document.getElementById("companyId").value;
                 let email = document.getElementById("email").value;
                 let password = document.getElementById("password").value;
+                let language = document.getElementById("language");
+
+                language = language.options[language.selectedIndex].value;
 
                 //API 호출
-                const res = await getAccessToken(clientId, companyId, email, password);
+                const res = await getAccessToken(clientId, companyId, email, password, language);
 
                 //결과값
                 console.log('res', res);
@@ -158,6 +162,14 @@
             <li class="li">
                 <span class="title">이싸인온 아이디 비밀번호(password)</span>
                 <input id="password" class="input" value=""/>
+            </li>
+            <li class="li">
+                <span class="title">언어(language)</span>
+                <select id="language" class="input">
+                    <option value="ko">한국어(ko)</option>
+                    <option value="en">English(en)</option>
+                    <option value="ja">日本語(ja)</option>
+                </select>
             </li>
             <li class="li" style="list-style-type: none;padding: 0px;float: right;">
                 <button id="btn_getAccessToken" class="btn call">인증토큰 발급받기</button>
