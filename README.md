@@ -112,7 +112,7 @@ async function getEsignonAccessToken() {
 ```
 
 #### Demo
-[인증토큰 발행 Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/d10698430ef09c5cd369de0a4190f695b7ab543f/demo/demo_access_token.html)
+[인증토큰 발행 Demo](https://raw.githack.com/eSignon/esignonapi-js/master/demo/demo_access_token.html)
 
 
 ***
