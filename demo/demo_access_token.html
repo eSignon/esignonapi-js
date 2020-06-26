@@ -1,0 +1,174 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        body {
+            background-color: #1c2833;
+        }
+        .container{
+            width: 100%;
+            display: table-cell;
+            line-height: 80px;
+        }
+
+        .ul {
+            list-style: decimal-leading-zero;
+            color: #fff;
+        }
+
+        .li {
+            padding: 10px;
+            font-size: 20px;;
+        }
+
+        .input {
+            font-size: 20px;
+            width: 550px;
+        }
+
+        .title {
+            color: #fff;
+            width: 345px;
+            display: inline-block;
+        }
+
+        .result {
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn {
+            box-sizing: border-box;
+            appearance: none;
+            background-color: transparent;
+            border: 2px solid #e74c3c;
+            border-radius: 0.6em;
+            color: #e74c3c;
+            cursor: pointer;
+            display: flex;
+            align-self: center;
+            font-size: 1.3rem;
+            font-weight: 400;
+            line-height: 1;
+            margin: 10px;
+            padding: 0.5em 1.5em;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .call {
+            border-color: #009fe8;
+            background-color: #009fe8;
+            color: #fff;
+        }
+
+        .subject {
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+    </style>
+
+    <!-- AXIOS REST API Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    
+    <!-- JQuery Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <!-- JSON Viewer Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
+
+    <!-- eSignon API Javascript Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://raw.githack.com/eSignon/esignonapi-js/master/src/esignonapi-js.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("btn_getAccessToken").onclick = function(){
+                getEsignonAccessToken();
+            };
+        }, false);
+
+        /* 인증토큰 발급 : ※ 반드시 try~catch로 감싸야 합니다. */
+        async function getEsignonAccessToken() {
+            try {
+
+                let clientId = document.getElementById("clientId").value;
+                let companyId = document.getElementById("companyId").value;
+                let email = document.getElementById("email").value;
+                let password = document.getElementById("password").value;
+
+                //API 호출
+                const res = await getAccessToken(clientId, companyId, email, password);
+
+                //결과값
+                console.log('res', res);
+
+                var editor =new JsonEditor('#json-display');
+                editor.load(res);
+                
+                //Success
+                if(res.header.result_code == '00') {
+                    accessToken = res.body.access_token;
+                    console.log('accessToken', accessToken);
+
+                //Fail
+                } else {
+                    //TODO Something
+                    alert(res.header.result_msg);
+
+                }
+
+            } catch (error) {
+                console.log(error)
+                alert(error);
+            }
+            
+        }
+    </script>
+    
+</head>
+<body>
+    <div class="container">
+        <div>
+            <img src="http://jc1.co.kr/image/logo_e.png" style="vertical-align:middle;width: 45px;margin-bottom: 10;"/>
+            <label class="subject">인증토큰 발급 테스트</label>
+            <a class="subject" href="https://app.gitbook.com/@jc1jedoc/s/esignon/issued/token" target="_blank">(API 문서 확인하기)</a>
+        </div>
+    </div>
+    <div style="display: inline-block;">
+        <ul class="ul">
+            <li class="li">
+                <span class="title">클라이언트 아이디(clientId)</span>
+                <input id="clientId" class="input" value="*C9E7513F88CF918AC0C393B3CF14F9CF26F70017"/>
+            </li>
+            <li class="li">
+                <span class="title">회사 아이디(companyId)</span>
+                <input id="companyId" class="input" value="testapi"/>
+            </li>
+            <li class="li">
+                <span class="title">이싸인온 가입 이메일(email)</span>
+                <input id="email" class="input" value=""/>
+            </li>
+            <li class="li">
+                <span class="title">이싸인온 아이디 비밀번호(password)</span>
+                <input id="password" class="input" value=""/>
+            </li>
+            <li class="li" style="list-style-type: none;padding: 0px;float: right;">
+                <button id="btn_getAccessToken" class="btn call">인증토큰 발급받기</button>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <span class="result">Response</span>
+        <pre id="json-display" style="padding-left: 20px;"></pre>
+    </div>
+
+</body>
+</html>

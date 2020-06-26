@@ -66,7 +66,7 @@ const RequestBodyAccessToken = function(clientId, email, password) {
  * @param email 사용자 가입 이메일 : 로그인할때 사용하는 이메일
  * @param password 사용자 비밀번호 
  * [TK Yoon 2020-06-23 13:43:57] */
-const getAccessToken = async function(clientId, companyId, email, password) {
+const getAccessToken = async function(clientId, companyId, email, password, language) {
     if(isNull(clientId)) {
         throw 'getAccessToken.clientId value is required.';
     }
@@ -83,9 +83,13 @@ const getAccessToken = async function(clientId, companyId, email, password) {
         throw 'getAccessToken.password value is required.';
     }
 
+    if(isNull(language)) {
+        language = 'ko'
+    }
+
     //API호출
     const response = await axios({
-        url         : `${domain}/api/${companyId}/login`,
+        url         : `${domain}/api/${companyId}/login?lang=en`,
         method      : "POST",
         headers     : new RequestHeader(),
         data        : new EsignonRequest(new EsignonRequestHeader("1001Q"), new RequestBodyAccessToken(clientId, email, password))
