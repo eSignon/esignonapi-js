@@ -84,12 +84,12 @@ const getAccessToken = async function(clientId, companyId, email, password, lang
     }
 
     if(isNull(language)) {
-        language = 'ko'
+        language = 'ko';
     }
 
     //API호출
     const response = await axios({
-        url         : `${domain}/api/${companyId}/login?lang=en`,
+        url         : `${domain}/api/${companyId}/login?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(),
         data        : new EsignonRequest(new EsignonRequestHeader("1001Q"), new RequestBodyAccessToken(clientId, email, password))
