@@ -103,15 +103,15 @@ const getAccessToken = async function(clientId, companyId, email, password, lang
 /** Strat : 비대면 계약 시작 : https://api.esignon.net/workflow/start/nonfacestart [TK Yoon 2020-06-24 08:37:21] */
 /* ############################################################################################################ */
 /** 비대면 계약 시작 Reqeust.Body.body [TK Yoon 2020-06-23 14:58:28] */
-const RequestBodyStartSimple = function(clientId, companyId, email, workflowName, docId, playerList, comment, language, fieldList, customerList, exportApiInfo) {
+const RequestBodyStartSimple = function(clientId, companyId, email, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
     this.client_id = clientId;              //필수 : 클라이언트 아이디
     this.comp_id = companyId;               //필수 : 회사 아이디
     this.biz_id = "0";                      //자동 : 부서아이디(초기값 : 0(회사))
     this.memb_email = email;                //필수 : 받는사람 이메일(휴대폰번호)
     this.workflow_name = workflowName;      //필수 : 문서명
     this.doc_id = docId;                    //필수 : 서식아이디
+    this.language = language;               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
     this.player_list = playerList;          //필수 : 받는사람
-    this.language = language;               //옵션 : 언어(초기값 : ko-KR(한글))
     this.comment = comment;                 //옵션 : 전달할 메시지
     this.field_list = fieldList;            //옵션 : 박스에 기본값을 입력할 경우 
     this.customer_list = customerList;      //옵션 : 참조자
@@ -131,7 +131,7 @@ const SetPlayer = function(emailOrMobileNo, name, language) {
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
-    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
+    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
 }
 
 /** 작성할 사람 설정 - 휴대폰인증 [TK Yoon 2020-06-25 13:21:19] */
@@ -151,8 +151,8 @@ const SetPlayerCertMobile = function(emailOrMobileNo, name, certMobileNumber, la
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
-    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
     this.mobile_number = certMobileNumber;                  //옵션 : 휴대폰 본인인증 휴대폰 번호
+    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
 }
 
 /** 작성할 사람 설정 - 비밀번호인증 [TK Yoon 2020-06-25 13:21:19] */
@@ -172,9 +172,9 @@ const SetPlayerCertPassword = function(emailOrMobileNo, name, certPassword, cert
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
-    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
     this.password = certPassword;                           //옵션 : 비밀번호 인증 비밀번호
     this.password_hint = certPasswordHint;                  //옵션 : 비밀번호 인증 힌트
+    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
 }
 
 /** 작성할 사람 설정 - 휴대폰인증 + 비밀번호인증 [TK Yoon 2020-06-25 13:21:19] */
@@ -201,7 +201,7 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
     this.mobile_number = certMobileNumber;                  //옵션 : 휴대폰 본인인증 휴대폰 번호
     this.password = certPassword;                           //옵션 : 비밀번호 인증 비밀번호
     this.password_hint = certPasswordHint;                  //옵션 : 비밀번호 인증 힌트
-    this.language = language;                               //옵션 : 언어(초기값 : ko-KR(한글))
+    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
 }
 
 /** 
@@ -214,7 +214,7 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
  * @param docId 서식아이디
  * @param playerList (Array) 작성하는 사람들
  *  [TK Yoon 2020-06-24 08:22:23] */
-const startNonfaceWorkflow = async function(accessToken, clientId, companyId, email, workflowName, docId, playerList) {
+const startNonfaceWorkflow = async function(accessToken, clientId, companyId, email, workflowName, docId, language, playerList) {
     if(isNull(accessToken)) {
         throw 'startNonfaceWorkflow.accessToken value is required.';
     }
@@ -239,6 +239,10 @@ const startNonfaceWorkflow = async function(accessToken, clientId, companyId, em
         throw 'startNonfaceWorkflow.docId value is required.';
     }
 
+    if(isNull(language)) {
+        language = 'ko';
+    }
+
     if(isNull(playerList)) {
         throw 'startNonfaceWorkflow.playerList value is required.';
     }
@@ -250,10 +254,10 @@ const startNonfaceWorkflow = async function(accessToken, clientId, companyId, em
 
     //API호출
     const response = await axios({
-        url         : `${domain}/api/${companyId}/startsimple`,
+        url         : `${domain}/api/${companyId}/startsimple?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(accessToken),
-        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(clientId, companyId, email, workflowName, docId, playerList))
+        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(clientId, companyId, email, workflowName, docId, language, playerList))
     });
 
     return response.data;
