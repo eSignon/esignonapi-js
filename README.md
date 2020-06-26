@@ -66,6 +66,11 @@ getAccessToken(:clientId, :companyId, :email, :password);
   - Type: `String`
   - 이싸인온 아이디 비밀번호
 
+- **language**
+  - Type: `String`
+  - 언어(한국어:ko, English:en, 日本語:ja)
+  - API Response.header.result_msg에 대한 설명을 선택 언어로 보여줍니다.
+
 #### Example
 
 ```js
@@ -79,6 +84,7 @@ async function getEsignonAccessToken() {
       , "testapi"                                   //companyId
       , "guide@esignon.net"                         //email
       , "guide12345*"                               //password
+      , "ko"                                        //language(한국어:ko, English:en, 日本語:ja)
     );
 
     //결과값
@@ -105,7 +111,8 @@ async function getEsignonAccessToken() {
 }
 ```
 
-#### [Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/d10698430ef09c5cd369de0a4190f695b7ab543f/demo/demo_access_token.html)
+#### Demo
+[인증토큰 발행 Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/d10698430ef09c5cd369de0a4190f695b7ab543f/demo/demo_access_token.html)
 
 
 ***
