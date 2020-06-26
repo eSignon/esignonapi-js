@@ -1,6 +1,7 @@
 # esignonapi-js.js
 
-> eSignon API JavaScript Library
+> eSignon API JavaScript Library는 eSignon Rest API를 더욱 쉽게 사용하기 위해 제공하는 자바스크립트 라이브러리입니다.
+
 
 - [eSignon Homepage](https://esignon.net)
 - [eSignon Service Website](https://docs.esignon.net)
@@ -119,7 +120,7 @@ async function getEsignonAccessToken() {
 
 #### 2. 비대면 계약 시작
 문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.  
-[REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart)
+[비대면 계약 시작 REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart)
 
 ```js
 startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, :docId, :playerList);
