@@ -44,7 +44,7 @@ API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
 [REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/issued/token)
 
 ```js
-getAccessToken(:clientId, :companyId, :email, :password);
+getAccessToken(:clientId, :companyId, :email, :password, :language);
 ```
 
 - **clientId**
