@@ -95,7 +95,8 @@
     <script src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
 
     <!-- eSignon API Javascript Library. download to use https://github.com/eSignon/esignonapi-js/dist/esignonapi-js.js [TK Yoon 2020-06-26 08:59:11] -->
-    <script src="https://raw.githack.com/eSignon/esignonapi-js/master/src/esignonapi-js.js"></script>
+    <!-- <script src="https://raw.githack.com/eSignon/esignonapi-js/master/src/esignonapi-js.js"></script> -->
+    <script src="esignonapi-js.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -108,7 +109,6 @@
         async function getEsignonAccessToken() {
             try {
 
-                let clientId = document.getElementById("clientId").value;
                 let companyId = document.getElementById("companyId").value;
                 let email = document.getElementById("email").value;
                 let password = document.getElementById("password").value;
@@ -117,7 +117,7 @@
                 language = language.options[language.selectedIndex].value;
 
                 //API 호출
-                const res = await getAccessToken(clientId, companyId, email, password, language);
+                const res = await getAccessToken(companyId, email, password, language);
 
                 //결과값
                 console.log('res', res);
@@ -158,10 +158,6 @@
     </div>
     <div style="display: inline-block;">
         <ul class="ul">
-            <li class="li">
-                <span class="title">클라이언트 아이디(clientId)</span>
-                <input id="clientId" class="input" value="*C9E7513F88CF918AC0C393B3CF14F9CF26F70017"/>
-            </li>
             <li class="li">
                 <span class="title">회사 아이디(companyId)</span>
                 <input id="companyId" class="input" value="testapi"/>
