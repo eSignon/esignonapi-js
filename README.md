@@ -116,26 +116,16 @@ async function getEsignonAccessToken() {
 [비대면 계약 시작 REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart)
 
 ```js
-startNonfaceWorkflow(:accessToken, :clientId, :companyId, :senderEmail, :workflowName, :docId, :playerList);
+startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerList);
 ```
 - **accessToken**
   - Type: `String`
   - 인증토큰
 
-- **clientId**
-  - Type: `String`
-  - 클라이언트 아이디
-  - `(결제전 테스트 고객)` *C9E7513F88CF918AC0C393B3CF14F9CF26F70017
-  - `(API요금제를 결제한 고객)` [발급요청 카카오톡 상담](http://pf.kakao.com/_WKXeT/chat) 또는 전화 02-6299-5926
-
 - **companyId**
   - Type: `String`
   - 회사 아이디
   - `(결제전 테스트 고객)` testapi
-
-- **senderEmail**
-  - Type: `String`
-  - 보내는 사람 이메일(이싸인온 가입 이메일)
 
 - **workflowName**
   - Type: `String`
@@ -225,11 +215,9 @@ async function startEsignonContract() {
       //계약(문서) 전송
       const res = await startNonfaceWorkflow(
         accessToken,                                  //인증토큰
-        '*C9E7513F88CF918AC0C393B3CF14F9CF26F70017',  //클라이언트아이디
         'testapi',                                    //회사아이디
-        'tkyoon@jcone.co.kr',                         //보내는 사람 이메일(이싸인온 가입자 아이디)
         '2020년 근로계약서_홍길동',                     //문서(계약)명
-        '2870',                                       //서식아이디
+        '1',                                       //서식아이디
         playerList                                    //문서작성자
       );
 
