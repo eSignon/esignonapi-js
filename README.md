@@ -64,7 +64,7 @@ getAccessToken(:companyId, :email, :password, :language);
 - **language**
   - Type: `String`
   - 언어(한국어:ko, English:en, 日本語:ja)
-  - 선택 언어로 API Response.header.result_msg를 표시합니다.
+  - API Response.header.result_msg를 선택한 언어로 표시합니다.
 
 #### Example
 
@@ -75,10 +75,10 @@ async function getEsignonAccessToken() {
     
     //Call API
     const res = await getAccessToken(
-      "testapi"                                   //companyId
-      , "guide@esignon.net"                         //email
-      , "guide12345*"                               //password
-      , "ko"                                        //language(한국어:ko, English:en, 日本語:ja)
+      "testapi"                //companyId
+      , "guide@esignon.net"    //email
+      , "guide12345*"          //password
+      , "ko"                   //language(한국어:ko, English:en, 日本語:ja)
     );
 
     //Response
@@ -113,6 +113,7 @@ async function getEsignonAccessToken() {
 
 #### 2. 비대면 계약 시작
 문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.  
+인증토큰을 발행한 사람이 보내는 사람으로 설정됩니다.  
 [비대면 계약 시작 REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart)
 
 ```js
@@ -141,7 +142,7 @@ startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerLis
   - Type: `String`
   - 언어(한국어:ko, English:en, 日本語:ja)
   - 선택한 언어로 이메일을 발송합니다.
-  - 선택 언어로 API Response.header.result_msg를 표시합니다.
+  - API Response.header.result_msg를 선택한 언어로 표시합니다.
 
 - **playerList**
   - Type: `Array`
@@ -214,11 +215,11 @@ async function startEsignonContract() {
 
       //계약(문서) 전송
       const res = await startNonfaceWorkflow(
-        accessToken,                                  //인증토큰
-        'testapi',                                    //회사아이디
-        '2020년 근로계약서_홍길동',                     //문서(계약)명
-        '1',                                       //서식아이디
-        playerList                                    //문서작성자
+        accessToken,                   //인증토큰
+        'testapi',                     //회사아이디
+        '2020년 근로계약서_홍길동',     //문서(계약)명
+        '1',                           //서식아이디
+        playerList                     //문서작성자
       );
 
       //결과값
@@ -244,6 +245,9 @@ async function startEsignonContract() {
     
 }
 ```
+
+#### Demo
+[비대면 계약 시작 Demo](https://raw.githack.com/eSignon/esignonapi-js/master/demo/start_nonface_workflow.html)
 
 ***
 
