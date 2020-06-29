@@ -11,8 +11,7 @@
 ## Main
 
 ```text
-dist/
-├── esignonapi-js.min.js   (compressed)
+src/
 └── esignonapi-js.js (CommonJS, default)
 ```
 
