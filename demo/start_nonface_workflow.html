@@ -1,0 +1,310 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        body {
+            background-color: #1c2833;
+        }
+        .container{
+            width: 100%;
+            display: table-cell;
+            line-height: 55px;
+            margin-top: 5px;
+        }
+
+        .ul {
+            list-style: decimal-leading-zero;
+            color: #fff;
+        }
+
+        .li {
+            padding: 10px;
+            font-size: 20px;;
+        }
+
+        .li1 {
+            margin: 10px;
+        }
+
+        .input {
+            font-size: 20px;
+            width: 550px;
+            height: 30px;
+        }
+
+        .input1 {
+            font-size: 20px;
+            width: 200px;
+            height: 30px;
+            margin-left: 10px;
+        }
+
+        .delete {
+            width: 80px;
+            cursor: pointer;
+        }
+
+        .title {
+            color: #fff;
+            width: 345px;
+            display: inline-block;
+        }
+
+        .result {
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn {
+            box-sizing: border-box;
+            appearance: none;
+            background-color: transparent;
+            border: 2px solid #e74c3c;
+            border-radius: 0.6em;
+            color: #e74c3c;
+            cursor: pointer;
+            display: flex;
+            align-self: center;
+            font-size: 1.3rem;
+            font-weight: 400;
+            line-height: 1;
+            margin: 10px;
+            padding: 0.5em 1.5em;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .call {
+            border-color: #009fe8;
+            background-color: #009fe8;
+            color: #fff;
+        }
+
+        .add {
+            font-size: 0.75rem;
+            display: inline;
+            margin: 0px;
+            vertical-align: bottom;
+        }
+
+        .subject1 {
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .subject2 {
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 35px;
+            margin-left: 50px;
+        }
+
+    </style>
+
+    <!-- AXIOS REST API Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    
+    <!-- JQuery Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <!-- JSON Viewer Library [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
+
+    <!-- eSignon API Javascript Library. download to use https://github.com/eSignon/esignonapi-js/dist/esignonapi-js.js [TK Yoon 2020-06-26 08:59:11] -->
+    <!-- <script src="esignonapi-js.js"></script> -->
+    <script src="https://rawcdn.githack.com/eSignon/esignonapi-js/5439d97e7cfc9201bc2b26a4eb689b6de5d33d02/src/esignonapi-js.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("btn_startWorkflow").onclick = function(){
+                startEsignonContract();
+            };
+
+            document.getElementById("btn_addPlayer").onclick = function() {
+                addPlayer();
+            };
+        }, false);
+
+        /* 비대면 계약 시작 : ※ 반드시 try~catch로 감싸야 합니다. */
+        async function startEsignonContract() {
+
+            try {
+
+                let accessToken = document.getElementById("accessToken").value;
+                let companyId = document.getElementById("companyId").value;
+                let workflowName = document.getElementById("workflowName").value;
+                let docId = document.getElementById("docId").value;
+                let language = document.getElementById("language").value;
+
+                let playerListDiv = document.getElementsByName("playerList");
+                console.log(playerListDiv)
+
+                let type;
+                let playerList = new Array();
+                for (let index = 0; index < playerListDiv.length; index++) {
+                    const element = playerListDiv[index];
+                    type = element.getAttribute('type');
+                    
+                    if(type == "SetPlayer") {
+                        element.childNodes[0].value
+                        playerList.push(new SetPlayer(element.childNodes[0].value, element.childNodes[1].value));
+
+                    } else if(type == "SetPlayerCertMobile") {
+                        playerList.push(new SetPlayerCertMobile(element.childNodes[0].value, element.childNodes[1].value, element.childNodes[2].value));
+
+                    } else if(type == "SetPlayerCertPassword") {
+                        playerList.push(new SetPlayerCertPassword(element.childNodes[0].value, element.childNodes[1].value, element.childNodes[2].value, element.childNodes[3].value));
+                        
+                    } else if(type == "SetPlayerCertMobilePassword") {
+                        playerList.push(new SetPlayerCertMobilePassword(element.childNodes[0].value, element.childNodes[1].value, element.childNodes[2].value, element.childNodes[3].value, element.childNodes[4].value));
+
+                    }
+                    
+                }
+
+                console.log(playerList)
+
+                //API 호출
+                let res = await startNonfaceWorkflow(accessToken, companyId, workflowName, docId, language, playerList);
+
+                //결과값
+                console.log('res', res);
+
+                var editor =new JsonEditor('#json-display');
+                editor.load(res);
+                
+                //Success
+                if(res.header.result_code == '00') {
+                    alert(res.header.result_msg);
+
+                //Fail
+                } else {
+                    //TODO Something
+                    alert(res.header.result_msg);
+
+                }
+
+            } catch (error) {
+                console.log(error);
+                alert(error);
+            }
+
+
+        }
+
+        function addPlayer() {
+            let playType = document.getElementById("slct_play_type");
+            playType = playType.options[playType.selectedIndex].value;
+
+            let playerDiv = document.getElementById("div_player");
+            console.log(playerDiv.innerHTML);
+            
+            let playerHtml = "";
+
+            let playDiv = document.createElement('div');
+            playDiv.className  = 'li';
+            playDiv.setAttribute('name', "playerList");
+            playDiv.setAttribute('type', playType);
+
+            // playerHtml += `<div name='playerList' class='li' type='${playType}'>`;
+            playerHtml += "<input class='input1' placeholder='emailOrMobileNo' />";
+            playerHtml += "<input class='input1' placeholder='name' />";
+
+            if(playType == 'SetPlayerCertMobile') {
+                playerHtml += "<input class='input1' placeholder='certMobileNumber' />";
+                
+            } else if(playType == 'SetPlayerCertPassword') {
+                playerHtml += "<input class='input1' placeholder='certPassword' />";
+                playerHtml += "<input class='input1' placeholder='certPasswordHint' />";
+                
+            } else if(playType == 'SetPlayerCertMobilePassword') {
+                playerHtml += "<input class='input1' placeholder='certMobileNumber' />";
+                playerHtml += "<input class='input1' placeholder='certPassword' />";
+                playerHtml += "<input class='input1' placeholder='certPasswordHint' />";
+
+            }
+
+            playerHtml += "<input type='button' class='input1 delete' value='Delete' onclick='deletePlayer(this)' />"
+
+            playDiv.innerHTML = playerHtml;
+            // playerDiv.innerHTML = playerHtml;
+
+            playerDiv.appendChild(playDiv);
+        }
+
+        function deletePlayer(sThis) {
+            console.log(sThis)
+            sThis.parentNode.remove();
+        }
+
+        
+    </script>
+    
+</head>
+<body>
+    <div class="container">
+        <div>
+            <img src="http://jc1.co.kr/image/logo_e.png" style="vertical-align:middle;width: 45px;margin-bottom: 10;"/>
+            <label class="subject1">eSignon 비대면 서식 시작 테스트</label>
+            <div><a class="subject2" href="https://github.com/eSignon/esignonapi-js#1-%EC%9D%B8%EC%A6%9D%ED%86%A0%ED%81%B0%EB%B0%9C%ED%96%89" target="_blank">Go eSignon API Javascript Library</a></div>
+            <div><a class="subject2" href="https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart" target="_blank">Go Rest API Documents</a></div>
+            <div><a class="subject2" href="https://github.com/eSignon/esignonapi-js/blob/master/demo/start_nonface_workflow.html" target="_blank">Go View Source</a></div>
+        </div>
+    </div>
+    <div style="display: inline-block;">
+        <ul class="ul">
+            <li class="li">
+                <span class="title">인증토큰(accessToken)</span>
+                <input id="accessToken" class="input" value=""/>
+            </li>
+            <li class="li">
+                <span class="title">회사 아이디(companyId)</span>
+                <input id="companyId" class="input" value="testapi"/>
+            </li>
+            <li class="li">
+                <span class="title">보내는 문서(계약)명</span>
+                <input id="workflowName" class="input" value=""/>
+            </li>
+            <li class="li">
+                <span class="title">서식아이디(docId)</span>
+                <input id="docId" class="input" value="1"/>
+            </li>
+            <li class="li">
+                <span class="title">언어(language)</span>
+                <select id="language" class="input">
+                    <option value="ko">한국어(ko)</option>
+                    <option value="en">English(en)</option>
+                    <option value="ja">日本語(ja)</option>
+                </select>
+            </li>
+            <li class="li">
+                <span class="title">문서 작성자(playerList)</span>
+                <select id="slct_play_type" class="input">
+                    <option value="SetPlayer">기본(SetPlayer)</option>
+                    <option value="SetPlayerCertMobile">휴대폰본인인증(SetPlayerCertMobile)</option>
+                    <option value="SetPlayerCertPassword">비밀번호인증(SetPlayerCertPassword)</option>
+                    <option value="SetPlayerCertMobilePassword">휴대폰본인인증 + 비밀번호인증(SetPlayerCertMobilePassword)</option>
+                </select>
+                <button id="btn_addPlayer" class="btn call add">작성자 추가</button>
+                <div id="div_player" class="li1"></div>
+            </li>
+            <li class="li" style="list-style-type: none;padding: 0px;float: right;">
+                <button id="btn_startWorkflow" class="btn call">비대면 계약 시작하기</button>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <span class="result">Response</span>
+        <pre id="json-display" style="padding-left: 20px;"></pre>
+    </div>
+
+</body>
+</html>
