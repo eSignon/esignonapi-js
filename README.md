@@ -111,7 +111,7 @@ async function getEsignonAccessToken() {
 ***
 
 #### 2. 비대면 계약 시작
-문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 보냅니다.  
+문서(계약)를 작성해야 하는 사람에게 이메일 또는 카카오톡(SMS)으로 계약을 보냅니다.  
 인증토큰을 발행한 사람이 보내는 사람으로 설정됩니다.  
 [비대면 계약 시작 REST API 문서 확인](https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart)
 
