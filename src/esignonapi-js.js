@@ -54,23 +54,18 @@ const EsignonRequestHeader = function(reqeustCode, version) {
 /** Strat : 인증토큰 발급 : https://api.esignon.net/issued/token ####### [TK Yoon 2020-06-24 08:37:21] */
 /* ################################################################################################## */
 //Request body 생성, Create Request body
-const RequestBodyAccessToken = function(clientId, email, password) {
-    this.client_id = clientId;
+const RequestBodyAccessToken = function(email, password) {
     this.memb_email = email;
     this.memb_pwd = password;
 }
 
 /** 인증토큰 발급
- * @param clientId 클라이언트 아이디(발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat, 전화 02-6299-5926)
  * @param companyId 회사아이디 : 이싸이온 설정 > 회사프로필 메뉴에서 확인할 수 있습니다.(회사 개설한 사람-리더직책만 가능)
  * @param email 사용자 가입 이메일 : 로그인할때 사용하는 이메일
  * @param password 사용자 비밀번호 
+ * @param language API Response.header.result_msg를 선택언어로 표시
  * [TK Yoon 2020-06-23 13:43:57] */
-const getAccessToken = async function(clientId, companyId, email, password, language) {
-    if(isNull(clientId)) {
-        throw 'getAccessToken.clientId value is required.';
-    }
-
+const getAccessToken = async function(companyId, email, password, language) {
     if(isNull(companyId)) {
         throw 'getAccessToken.companyId value is required.';
     }
@@ -92,7 +87,7 @@ const getAccessToken = async function(clientId, companyId, email, password, lang
         url         : `${domain}/api/${companyId}/login?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(),
-        data        : new EsignonRequest(new EsignonRequestHeader("1001Q"), new RequestBodyAccessToken(clientId, email, password))
+        data        : new EsignonRequest(new EsignonRequestHeader("1001Q"), new RequestBodyAccessToken(email, password))
     });
     return response.data;
 };
@@ -103,11 +98,9 @@ const getAccessToken = async function(clientId, companyId, email, password, lang
 /** Strat : 비대면 계약 시작 : https://api.esignon.net/workflow/start/nonfacestart [TK Yoon 2020-06-24 08:37:21] */
 /* ############################################################################################################ */
 /** 비대면 계약 시작 Reqeust.Body.body [TK Yoon 2020-06-23 14:58:28] */
-const RequestBodyStartSimple = function(clientId, companyId, email, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
-    this.client_id = clientId;              //필수 : 클라이언트 아이디
+const RequestBodyStartSimple = function(companyId, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
     this.comp_id = companyId;               //필수 : 회사 아이디
     this.biz_id = "0";                      //자동 : 부서아이디(초기값 : 0(회사))
-    this.memb_email = email;                //필수 : 받는사람 이메일(휴대폰번호)
     this.workflow_name = workflowName;      //필수 : 문서명
     this.doc_id = docId;                    //필수 : 서식아이디
     this.language = language;               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
@@ -208,27 +201,18 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
  * 비대면 계약을 전송합니다.
  * @param accessToken 인증토큰 getAccessToken함수를 이용하여 발급받은 토큰
  * @param companyId 회사아이디 회사아이디 : 이싸이온 설정 > 회사프로필 메뉴에서 확인할 수 있습니다.(회사 개설한 사람-리더직책만 가능)
- * @param clientId 클라이언트 아이디(발급요청 카카오톡 http://pf.kakao.com/_WKXeT/chat, 전화 02-6299-5926)
  * @param email 보내는 사람 이메일
  * @param workflowName 보내는 문서(계약서) 제목
  * @param docId 서식아이디
  * @param playerList (Array) 작성하는 사람들
  *  [TK Yoon 2020-06-24 08:22:23] */
-const startNonfaceWorkflow = async function(accessToken, clientId, companyId, email, workflowName, docId, language, playerList) {
+const startNonfaceWorkflow = async function(accessToken, companyId, workflowName, docId, language, playerList) {
     if(isNull(accessToken)) {
         throw 'startNonfaceWorkflow.accessToken value is required.';
     }
 
-    if(isNull(clientId)) {
-        throw 'startNonfaceWorkflow.clientId value is required.';
-    }
-
     if(isNull(companyId)) {
         throw 'startNonfaceWorkflow.companyId value is required.';
-    }
-
-    if(isNull(email)) {
-        throw 'startNonfaceWorkflow.email value is required.';
     }
 
     if(isNull(workflowName)) {
@@ -257,7 +241,7 @@ const startNonfaceWorkflow = async function(accessToken, clientId, companyId, em
         url         : `${domain}/api/${companyId}/startsimple?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(accessToken),
-        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(clientId, companyId, email, workflowName, docId, language, playerList))
+        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(companyId, workflowName, docId, language, playerList))
     });
 
     return response.data;
