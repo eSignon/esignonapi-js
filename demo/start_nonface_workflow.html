@@ -139,6 +139,7 @@
 
                 let accessToken = document.getElementById("accessToken").value;
                 let companyId = document.getElementById("companyId").value;
+                let senderEmail = document.getElementById("email").value;
                 let workflowName = document.getElementById("workflowName").value;
                 let docId = document.getElementById("docId").value;
                 let language = document.getElementById("language").value;
@@ -172,7 +173,7 @@
                 console.log(playerList)
 
                 //API 호출
-                let res = await startNonfaceWorkflow(accessToken, companyId, workflowName, docId, language, playerList);
+                let res = await startNonfaceWorkflow(accessToken, companyId, senderEmail, workflowName, docId, language, playerList);
 
                 //결과값
                 console.log('res', res);
@@ -265,6 +266,10 @@
             <li class="li">
                 <span class="title">회사 아이디(companyId)</span>
                 <input id="companyId" class="input" value="testapi"/>
+            </li>
+            <li class="li">
+                <span class="title">보내는사람 이메일(이싸인온 가입자)</span>
+                <input id="email"" class="input" value=""/>
             </li>
             <li class="li">
                 <span class="title">보내는 문서(계약)명</span>
