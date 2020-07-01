@@ -99,7 +99,7 @@ const getAccessToken = async function(companyId, email, password, language) {
 /* ############################################################################################################ */
 /** 비대면 계약 시작 Reqeust.Body.body [TK Yoon 2020-06-23 14:58:28] */
 const RequestBodyStartSimple = function(senderEmail, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
-    this.email = senderEmail;               //필수 : 보내는사람 이메일
+    this.memb_email = senderEmail;          //필수 : 보내는사람 이메일
     this.biz_id = "0";                      //자동 : 부서아이디(초기값 : 0(회사))
     this.workflow_name = workflowName;      //필수 : 문서명
     this.doc_id = docId;                    //필수 : 서식아이디
