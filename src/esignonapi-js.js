@@ -98,7 +98,8 @@ const getAccessToken = async function(companyId, email, password, language) {
 /** Strat : 비대면 계약 시작 : https://api.esignon.net/workflow/start/nonfacestart [TK Yoon 2020-06-24 08:37:21] */
 /* ############################################################################################################ */
 /** 비대면 계약 시작 Reqeust.Body.body [TK Yoon 2020-06-23 14:58:28] */
-const RequestBodyStartSimple = function(companyId, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
+const RequestBodyStartSimple = function(senderEmail, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
+    this.email = senderEmail;               //필수 : 보내는사람 이메일
     this.biz_id = "0";                      //자동 : 부서아이디(초기값 : 0(회사))
     this.workflow_name = workflowName;      //필수 : 문서명
     this.doc_id = docId;                    //필수 : 서식아이디
@@ -200,18 +201,23 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
  * 비대면 계약을 전송합니다.
  * @param accessToken 인증토큰 getAccessToken함수를 이용하여 발급받은 토큰
  * @param companyId 회사아이디 회사아이디 : 이싸이온 설정 > 회사프로필 메뉴에서 확인할 수 있습니다.(회사 개설한 사람-리더직책만 가능)
- * @param email 보내는 사람 이메일
+ * @param senderEmail 보내는 사람 이메일
  * @param workflowName 보내는 문서(계약서) 제목
  * @param docId 서식아이디
+ * @param language msg 표시 언어
  * @param playerList (Array) 작성하는 사람들
  *  [TK Yoon 2020-06-24 08:22:23] */
-const startNonfaceWorkflow = async function(accessToken, companyId, workflowName, docId, language, playerList) {
+const startNonfaceWorkflow = async function(accessToken, companyId, senderEmail, workflowName, docId, language, playerList) {
     if(isNull(accessToken)) {
         throw 'startNonfaceWorkflow.accessToken value is required.';
     }
 
     if(isNull(companyId)) {
         throw 'startNonfaceWorkflow.companyId value is required.';
+    }
+
+    if(isNull(senderEmail)) {
+        throw 'startNonfaceWorkflow.senderEmail value is required.';
     }
 
     if(isNull(workflowName)) {
@@ -240,7 +246,7 @@ const startNonfaceWorkflow = async function(accessToken, companyId, workflowName
         url         : `${domain}/api/${companyId}/startsimple?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(accessToken),
-        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(companyId, workflowName, docId, language, playerList))
+        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(senderEmail, workflowName, docId, language, playerList))
     });
 
     return response.data;

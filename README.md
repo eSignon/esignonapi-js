@@ -127,6 +127,10 @@ startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerLis
   - 회사 아이디
   - `(결제전 테스트 고객)` testapi
 
+- **senderEmail**
+  - Type: `String`
+  - 보내는 사람 이메일(이싸인온 가입자)
+
 - **workflowName**
   - Type: `String`
   - 보내는 문서(계약)명
@@ -216,6 +220,7 @@ async function startEsignonContract() {
       const res = await startNonfaceWorkflow(
         accessToken,                   //인증토큰
         'testapi',                     //회사아이디
+        'tkyoon@jcone.co.kr',          //보내는 사람 이메일
         '2020년 근로계약서_홍길동',     //문서(계약)명
         '1',                           //서식아이디
         playerList                     //문서작성자
