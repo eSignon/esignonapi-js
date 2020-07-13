@@ -47,22 +47,22 @@ API를 이용하기 위한 사용자 인증 토큰을 발행합니다.
 getAccessToken(:companyId, :email, :password, :language);
 ```
 
-- **companyId**
+- **companyId (필수)**
   - Type: `String`
   - 회사 아이디
   - `(결제전 테스트 고객)` testapi
 
-- **email**
+- **email (필수)**
   - Type: `String`
   - 이싸인온 가입 이메일(아이디)
 
-- **password**
+- **password (필수)**
   - Type: `String`
   - 이싸인온 아이디 비밀번호
 
-- **language**
+- **language (옵션)**
   - Type: `String`
-  - 언어(한국어:ko, English:en, 日本語:ja)
+  - 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
   - API Response.header.result_msg를 선택한 언어로 표시합니다.
 
 #### Example
@@ -73,25 +73,28 @@ async function getEsignonAccessToken() {
   try {
     
     //Call API
-    const res = await getAccessToken(
+    const retData = await getAccessToken(
       "testapi"                //companyId
       , "guide@esignon.net"    //email
       , "guide12345*"          //password
-      , "ko"                   //language(한국어:ko, English:en, 日本語:ja)
+      , "ko-KR"                //language(한국어:ko-KR, English:en-JS, 日本語:ja-JP)
     );
 
+    //Request
+    console.log('req', retData.req);
+
     //Response
-    console.log('res', res);
+    console.log('res', retData.res);
 
     //Success
-    if(res.header.result_code == '00') {
-      accessToken = res.body.access_token;        //access token
+    if(retData.res.header.result_code == '00') {
+      accessToken = retData.res.body.access_token;        //access token
       console.log('accessToken', accessToken);
 
     //Fail
     } else {
-      //TODO Something
-      alert(res.header.result_msg);
+      //Do Something
+      alert(retData.res.header.result_msg);
 
     }
 
@@ -105,7 +108,7 @@ async function getEsignonAccessToken() {
 ```
 
 #### Demo
-[인증토큰 발행 Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/312356d3a7ba1d2a197a54f1c134e907e91f1ce6/demo/demo_access_token.html)
+[인증토큰 발행 Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/5fed9986e1452716bd14b9f5fcc8f8c0e246633f/demo/demo_access_token.html)
 
 
 ***
@@ -118,36 +121,30 @@ async function getEsignonAccessToken() {
 ```js
 startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerList);
 ```
-- **accessToken**
+- **accessToken (필수)**
   - Type: `String`
   - 인증토큰
 
-- **companyId**
+- **companyId (필수)**
   - Type: `String`
   - 회사 아이디
   - `(결제전 테스트 고객)` testapi
 
-- **senderEmail**
+- **senderEmail (필수)**
   - Type: `String`
   - 보내는 사람 이메일(이싸인온 가입자)
 
-- **workflowName**
+- **workflowName (필수)**
   - Type: `String`
   - 보내는 문서(계약)명
 
-- **docId**
+- **docId (필수)**
   - Type: `String`
   - 서식아이디
   - [이싸인온](https://docs.esignon.net)에 로그인 후 서식메뉴에서 서식을 생성하거나, 목록에서 서식아이디를 확인할 수 있습니다.
   - [비대면 서식만드는 방법 동영상 확인](https://youtu.be/Hwngs2Fqy3E)
 
-- **language**
-  - Type: `String`
-  - 언어(한국어:ko, English:en, 日本語:ja)
-  - 선택한 언어로 이메일을 발송합니다.
-  - API Response.header.result_msg를 선택한 언어로 표시합니다.
-
-- **playerList**
+- **playerList (필수)**
   - Type: `Array`
   - 문서 작성자
   - 작성자가 여러명인 경우 배열에 앞선 사람이 먼저 작성하게 됩니다.
@@ -197,6 +194,41 @@ startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerLis
       ));
     ```  
 
+- **comment (옵션)**
+  - Type: `String`
+  - 전달메시지
+  - 작성자들에게 전달할 메시지를 입력합니다.
+
+- **fieldList (옵션)**
+  - Type: `Array`
+  - 초기 입력값
+  - 서식에 생성된 라디오박스, 체크박스, 텍스트박스, 라벨박스의 값을 입력합니다.
+  - 라디오박스, 체크박스의 경우 체크할 경우 fieldValue에 Y로 입력합니다.
+  ```js
+      let fieldList = new Array();
+      fieldList.push(new SetFieldList(
+        :fieldName,     //박스이름
+        :fieldValue,    //박스에 입력할 값
+      ));
+  ```
+- **customerList (옵션)**
+  - Type: `Array`
+  - 참조할 사람
+  - 문서를 참조할 사람을 여려명 지정할 수 있습니다.
+  ```js
+      let customerList = new Array();
+      fieldList.push(new SetCustomerList(
+        :email,       //이메일주소
+        :name,        //받는 사람 이름
+      ));
+  ```
+- **language (옵션)**
+  - Type: `String`
+  - 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
+  - 선택한 언어로 이메일을 발송합니다.
+  - API Response.header.result_msg를 선택한 언어로 표시합니다.
+
+
 #### Example) 3명이 작성하는 문서를 보내는 경우
 > 두번째 작성자는 휴대폰본인인증을 요청, 세번째 작성자는 비밀번호인증을 요청
 ```js
@@ -217,7 +249,7 @@ async function startEsignonContract() {
       playerList.push(new SetPlayerCertPassword('tkyoon@jcone.co.kr', 'TK Yoon', '19991024', '생년월일 6자리'));
 
       //계약(문서) 전송
-      const res = await startNonfaceWorkflow(
+      const retData = await startNonfaceWorkflow(
         accessToken,                   //인증토큰
         'testapi',                     //회사아이디
         'tkyoon@jcone.co.kr',          //보내는 사람 이메일
@@ -226,18 +258,81 @@ async function startEsignonContract() {
         playerList                     //문서작성자
       );
 
-      //결과값
-      console.log('res', res);
+      //Request
+      console.log('Request', retData.req);
+
+      //Response
+      console.log('Response', retData.res);
       
       //Success
-      if(res.header.result_code == '00') {
-        //TODO Something
+      if(retData.res.header.result_code == '00') {
+        //Do Something
           
 
       //Fail
       } else {
-        //TODO Something
-        alert(res.header.result_msg);
+        //Do Something
+        alert(retData.res.header.result_msg);
+
+      }
+
+    } catch (error) {
+      console.log(error);
+      alert(error);
+
+    }
+    
+}
+```
+
+#### Example) 1명이 작성하는 문서에 이름이라는 텍스트박스에 미리 홍길동이라고 입력하여, 참조자 1명을 추가하여 보내는 경우
+> 작성자(홍길동)가 계약서를 받았을 경우 이름 입력란에는 이미 홍길동이 입력되어 계약서를 받습니다.
+```js
+async function startEsignonContract() {
+    
+    try {
+
+      //작성할 사람 설정
+      let playerList = new Array();
+
+      //첫번째 작성자(이메일로 전달받음)
+      playerList.push(new SetPlayer('guide@esignon.net', '홍길동'); 
+
+      //초기 입력값 설정
+      let fieldList = new Array();
+      fieldList.push(new SetFieldList('이름', '홍길동'));
+
+      //참조자 1명 추가
+      let customerList = new Array();
+      customerList.push(new SetCustomerList('jc1@jcone.co.kr', '제이씨원'));
+
+      //계약(문서) 전송
+      const retData = await startNonfaceWorkflow(
+        accessToken,                    //인증토큰
+        'testapi',                      //회사아이디
+        'tkyoon@jcone.co.kr',           //보내는 사람 이메일
+        '2020년 근로계약서_홍길동',       //문서(계약)명
+        '1',                            //서식아이디
+        playerList,                     //문서작성자
+        '서명요청드려요',                //전달 메시지
+        '',                             //초기 입력값
+        customerList                    //참조자
+      );
+
+      //Request
+      console.log('Request', retData.req);
+
+      //Response
+      console.log('Response', retData.res);
+      
+      //Success
+      if(retData.res.header.result_code == '00') {
+        //Do Something
+
+      //Fail
+      } else {
+        //Do Something
+        alert(retData.res.header.result_msg);
 
       }
 
@@ -251,7 +346,7 @@ async function startEsignonContract() {
 ```
 
 #### Demo
-[비대면 계약 시작 Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/6fa0fd3ad586e74062b22ec821e5d22d3d40663c/demo/start_nonface_workflow.html)
+[비대면 계약 시작 Demo](https://rawcdn.githack.com/eSignon/esignonapi-js/5fed9986e1452716bd14b9f5fcc8f8c0e246633f/demo/start_nonface_workflow.html)
 
 ***
 
