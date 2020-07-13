@@ -80,16 +80,25 @@ const getAccessToken = async function(companyId, email, password, language) {
 
     if(isNull(language)) {
         language = 'ko';
+
+    } else {
+        language = language.substring(0, 2);
+
     }
 
+    let requestJson = new EsignonRequest(new EsignonRequestHeader("1001Q"), new RequestBodyAccessToken(email, password));
+
     //API호출
-    const response = await axios({
+    let response = await axios({
         url         : `${domain}/api/${companyId}/login?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(),
-        data        : new EsignonRequest(new EsignonRequestHeader("1001Q"), new RequestBodyAccessToken(email, password))
+        data        : requestJson
     });
-    return response.data;
+
+    response.res = response.data
+    response.req = requestJson;
+    return response;
 };
 /* ################################################################################################## */
 /** End : 인증토큰 발급 : https://api.esignon.net/issued/token ######### [TK Yoon 2020-06-24 08:37:21] */
@@ -98,17 +107,17 @@ const getAccessToken = async function(companyId, email, password, language) {
 /** Strat : 비대면 계약 시작 : https://api.esignon.net/workflow/start/nonfacestart [TK Yoon 2020-06-24 08:37:21] */
 /* ############################################################################################################ */
 /** 비대면 계약 시작 Reqeust.Body.body [TK Yoon 2020-06-23 14:58:28] */
-const RequestBodyStartSimple = function(senderEmail, workflowName, docId, language, playerList, comment, fieldList, customerList, exportApiInfo) {
+const RequestBodyStartSimple = function(senderEmail, workflowName, docId, playerList, comment, fieldList, customerList, exportApiInfo, language) {
     this.memb_email = senderEmail;          //필수 : 보내는사람 이메일
     this.biz_id = "0";                      //자동 : 부서아이디(초기값 : 0(회사))
     this.workflow_name = workflowName;      //필수 : 문서명
     this.doc_id = docId;                    //필수 : 서식아이디
-    this.language = language;               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
     this.player_list = playerList;          //필수 : 받는사람
     this.comment = comment;                 //옵션 : 전달할 메시지
     this.field_list = fieldList;            //옵션 : 박스에 기본값을 입력할 경우 
     this.customer_list = customerList;      //옵션 : 참조자
-    this.export_api_info = exportApiInfo;   //옵션 : 단계별 Response 받고자 할 경우
+    //this.export_api_info = exportApiInfo;   //옵션 : 단계별 Response 받고자 할 경우
+    this.language = language;               //옵션 : 언어(한국어:ko-KR, English:en, 日本語:ja)
 }
 
 /** 작성할 사람 설정 [TK Yoon 2020-06-23 16:00:40] */
@@ -121,10 +130,14 @@ const SetPlayer = function(emailOrMobileNo, name, language) {
         throw 'SetPlayer.name value is required.';
     }
 
+    if(isNull(language)){
+        language = "ko-KR";
+    }
+
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
-    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
+    this.language = language;                               //옵션 : 이메일 발송 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
 }
 
 /** 작성할 사람 설정 - 휴대폰인증 [TK Yoon 2020-06-25 13:21:19] */
@@ -141,11 +154,15 @@ const SetPlayerCertMobile = function(emailOrMobileNo, name, certMobileNumber, la
         throw 'SetPlayerCertMobile.certMobileNumber value is required.';
     }
 
+    if(isNull(language)){
+        language = "ko-KR";
+    }
+
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
     this.mobile_number = certMobileNumber;                  //옵션 : 휴대폰 본인인증 휴대폰 번호
-    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
+    this.language = language;                               //옵션 : 이메일 발송 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
 }
 
 /** 작성할 사람 설정 - 비밀번호인증 [TK Yoon 2020-06-25 13:21:19] */
@@ -162,17 +179,21 @@ const SetPlayerCertPassword = function(emailOrMobileNo, name, certPassword, cert
         throw 'SetPlayerCertPassword.certPassword value is required.';
     }
 
+    if(isNull(language)){
+        language = "ko-KR";
+    }
+
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
     this.password = certPassword;                           //옵션 : 비밀번호 인증 비밀번호
     this.password_hint = certPasswordHint;                  //옵션 : 비밀번호 인증 힌트
-    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
+    this.language = language;                               //옵션 : 이메일 발송 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
 }
 
 /** 작성할 사람 설정 - 휴대폰인증 + 비밀번호인증 [TK Yoon 2020-06-25 13:21:19] */
 const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNumber, certPassword, certPasswordHint, language) {
-    if(isNull(emailOrMobileNo)){
+    if(isNull(emailOrMobileNo)) {
         throw 'SetPlayerCertMobilePassword.emailOrMobileNo value is required.';
     }
 
@@ -188,13 +209,50 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
         throw 'SetPlayerCertMobilePassword.certPassword value is required.'
     }
 
+    if(isNull(language)){
+        language = "ko-KR";
+    }
+
     this.field_owner = "1"                                  //자동 : 작성순서(1부터 숫자로 입력)
     this.email = emailOrMobileNo;                           //필수 : 받는사람 이메일 또는 휴대폰 번호
     this.name = name;                                       //필수 : 받는 사람 이름
     this.mobile_number = certMobileNumber;                  //옵션 : 휴대폰 본인인증 휴대폰 번호
     this.password = certPassword;                           //옵션 : 비밀번호 인증 비밀번호
     this.password_hint = certPasswordHint;                  //옵션 : 비밀번호 인증 힌트
-    this.language = language;                               //옵션 : 언어(한국어:ko, English:en, 日本語:ja)
+    this.language = language;                               //옵션 : 이메일 발송 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
+}
+
+/** 박스값을 입력하여 발송 [TK Yoon 2020-07-07 15:37:56] */
+const SetFieldList = function(fieldName, fieldValue) {
+    if(isNull(fieldName)){
+        throw 'SetFieldList.fieldName value is required.';
+    }
+
+    if(isNull(fieldValue)){
+        throw 'SetFieldList.fieldValue value is required.';
+    }
+
+    this.field_name = fieldName;                            //필수 : 박스이름
+    this.field_value = fieldValue;                          //필수 : 박스값
+}
+
+/** 참조자 설정 [TK Yoon 2020-07-10 14:45:58] */
+const SetCustomerList = function(email, name, language) {
+    if(isNull(email)){
+        throw 'SetCustomerList.email value is required.';
+    }
+
+    if(isNull(name)){
+        throw 'SetCustomerList.name value is required.';
+    }
+
+    if(isNull(language)){
+        language = "ko-KR";
+    }
+
+    this.email = email;                                       //필수 : 이메일
+    this.name = name;                                         //필수 : 이름
+    this.language = language;                                 //옵션 : 이메일 발송 언어(한국어:ko-KR, English:en-US, 日本語:ja-JP)
 }
 
 /** 
@@ -207,7 +265,7 @@ const SetPlayerCertMobilePassword = function(emailOrMobileNo, name, certMobileNu
  * @param language msg 표시 언어
  * @param playerList (Array) 작성하는 사람들
  *  [TK Yoon 2020-06-24 08:22:23] */
-const startNonfaceWorkflow = async function(accessToken, companyId, senderEmail, workflowName, docId, language, playerList) {
+const startNonfaceWorkflow = async function(accessToken, companyId, senderEmail, workflowName, docId, playerList, comment, fieldList, customerList, language) {
     if(isNull(accessToken)) {
         throw 'startNonfaceWorkflow.accessToken value is required.';
     }
@@ -228,12 +286,12 @@ const startNonfaceWorkflow = async function(accessToken, companyId, senderEmail,
         throw 'startNonfaceWorkflow.docId value is required.';
     }
 
-    if(isNull(language)) {
-        language = 'ko';
-    }
-
     if(isNull(playerList)) {
         throw 'startNonfaceWorkflow.playerList value is required.';
+    }
+
+    if(isNull(language)) {
+        language = 'ko-KR';
     }
 
     //작성자 순서 자동 등록
@@ -241,49 +299,22 @@ const startNonfaceWorkflow = async function(accessToken, companyId, senderEmail,
         playerList[index].field_owner = (index + 1);
     }
 
+    const requestJson = new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(senderEmail, workflowName, docId, playerList, comment, fieldList, customerList, "", language));
+
+    //spring locale
+    language = language.substring(0, 2);
+
     //API호출
     const response = await axios({
         url         : `${domain}/api/${companyId}/startsimple?lang=${language}`,
         method      : "POST",
         headers     : new RequestHeader(accessToken),
-        data        : new EsignonRequest(new EsignonRequestHeader("5005Q"), new RequestBodyStartSimple(senderEmail, workflowName, docId, language, playerList))
+        data        : requestJson
     });
 
-    return response.data;
+    response.res = response.data
+    response.req = requestJson;
+    return response;
 };
 /** End : 비대면 계약 시작 : https://api.esignon.net/workflow/start/nonfacestart [TK Yoon 2020-06-24 08:37:21] */
 /* ########################################################################################################## */
-
-
-const StartSimpleField = function() {
-    // this.email = "";
-    // this.memb_id_type = "";
-    // this.name = "";
-    // this.language = "ko-KR"
-}
-
-const StartSimpleCustomer = function() {
-    // this.field_owner = "1"
-    // this.email = "";
-    // this.memb_id_type = "";
-    // this.name = "";
-    // this.language = "ko-KR"
-    // this.enable_mobile_cert = "false";
-    // this.mobile_number = ""
-    // this.enable_password_cert = "false";
-    // this.password_hint = "";
-    // this.password = "";
-}
-
-const StartSimpleExportApi = function() {
-    // this.field_owner = "1"
-    // this.email = "";
-    // this.memb_id_type = "";
-    // this.name = "";
-    // this.language = "ko-KR"
-    // this.enable_mobile_cert = "false";
-    // this.mobile_number = ""
-    // this.enable_password_cert = "false";
-    // this.password_hint = "";
-    // this.password = "";
-}
