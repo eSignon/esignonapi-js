@@ -119,7 +119,7 @@ async function getEsignonAccessToken() {
 [비대면 계약 시작 REST API 문서 확인](https://api.esignon.net/workflow/start/nonfacestart)
 
 ```js
-startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerList);
+startNonfaceWorkflow(:accessToken, :companyId, :workflowName, :docId, :playerList, :comment, :fieldList, :customerList, :language);
 ```
 - **accessToken (필수)**
   - Type: `String`
