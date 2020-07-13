@@ -40,6 +40,12 @@
             margin-left: 10px;
         }
 
+        .input2 {
+            font-size: 20px;
+            width: 200px;
+            height: 30px;
+        }
+
         .delete {
             width: 80px;
             cursor: pointer;
@@ -47,7 +53,7 @@
 
         .title {
             color: #fff;
-            width: 345px;
+            width: 400px;
             display: inline-block;
         }
 
@@ -106,6 +112,14 @@
             margin-left: 50px;
         }
 
+        .selected {
+            color: #ffeb3b;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
     </style>
 
     <!-- AXIOS REST API Library [TK Yoon 2020-06-26 08:59:11] -->
@@ -117,18 +131,49 @@
     <!-- JSON Viewer Library [TK Yoon 2020-06-26 08:59:11] -->
     <script src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
 
-    <!-- eSignon API Javascript Library. download to use https://github.com/eSignon/esignonapi-js/dist/esignonapi-js.js [TK Yoon 2020-06-26 08:59:11] -->
-    <!-- <script src="esignonapi-js.js"></script> -->
-    <script src="https://rawcdn.githack.com/eSignon/esignonapi-js/312356d3a7ba1d2a197a54f1c134e907e91f1ce6/src/esignonapi-js.js"></script>
+    <!-- eSignon API Javascript Library. download to use https://github.com/eSignon/esignonapi-js/src/esignonapi-js.js [TK Yoon 2020-06-26 08:59:11] -->
+    <script src="https://rawcdn.githack.com/eSignon/esignonapi-js/8c33df363a50afe0e925e6bf865b7c2e924b674c/src/esignonapi-js.js"></script>
 
     <script>
+
+        var returnData;
         document.addEventListener('DOMContentLoaded', function() {
+            //비대면 계약 시작
             document.getElementById("btn_startWorkflow").onclick = function(){
                 startEsignonContract();
             };
 
+            //작성자 추가
             document.getElementById("btn_addPlayer").onclick = function() {
                 addPlayer();
+            };
+
+            //박스 입력값 추가
+            document.getElementById("btn_addField").onclick = function() {
+                addField();
+            };
+
+            //참조자 추가
+            document.getElementById("btn_addCustomer").onclick = function() {
+                addCustomer();
+            };
+
+            //Request 클릭
+            document.getElementById("a_req").onclick = function() {
+                document.getElementById("a_res").classList.remove("selected");
+                document.getElementById("a_req").classList.add("selected");
+
+                var editor = new JsonEditor('#json-display');
+                editor.load(returnData.req);
+            };
+
+            //Response 클릭
+            document.getElementById("a_res").onclick = function() {
+                document.getElementById("a_req").classList.remove("selected");
+                document.getElementById("a_res").classList.add("selected");
+
+                var editor = new JsonEditor('#json-display');
+                editor.load(returnData.res);
             };
         }, false);
 
@@ -143,10 +188,12 @@
                 let workflowName = document.getElementById("workflowName").value;
                 let docId = document.getElementById("docId").value;
                 let language = document.getElementById("language").value;
+                let comment = document.getElementById("comment").value;
 
                 let playerListDiv = document.getElementsByName("playerList");
-                console.log(playerListDiv)
+                //console.log(playerListDiv)
 
+                /* 작성자 설정 */
                 let type;
                 let playerList = new Array();
                 for (let index = 0; index < playerListDiv.length; index++) {
@@ -154,7 +201,6 @@
                     type = element.getAttribute('type');
                     
                     if(type == "SetPlayer") {
-                        element.childNodes[0].value
                         playerList.push(new SetPlayer(element.childNodes[0].value, element.childNodes[1].value));
 
                     } else if(type == "SetPlayerCertMobile") {
@@ -170,16 +216,37 @@
                     
                 }
 
-                console.log(playerList)
+                //console.log(playerList)
+
+                /* 박스 입력값 설정 */
+                let fieldListDiv = document.getElementsByName("fieldList");
+                //console.log(fieldListDiv);
+                let fieldList = new Array();
+                for (let index = 0; index < fieldListDiv.length; index++) {
+                    const element = fieldListDiv[index];
+                    fieldList.push(new SetFieldList(element.childNodes[0].value, element.childNodes[1].value))
+                }
+
+                /* 참조자 설정 */
+                let customerListDiv = document.getElementsByName("customerList");
+                let customerList = new Array();
+                for (let index = 0; index < customerListDiv.length; index++) {
+                    const element = customerListDiv[index];
+                    customerList.push(new SetCustomerList(element.childNodes[0].value, element.childNodes[1].value))
+                }
 
                 //API 호출
-                let res = await startNonfaceWorkflow(accessToken, companyId, senderEmail, workflowName, docId, language, playerList);
+                let res = await startNonfaceWorkflow(accessToken, companyId, senderEmail, workflowName, docId, playerList, comment, fieldList, customerList, language);
 
                 //결과값
-                console.log('res', res);
+                //console.log('res', res);
+                returnData = res;
 
-                var editor =new JsonEditor('#json-display');
-                editor.load(res);
+                document.getElementById("a_req").classList.remove("selected");
+                document.getElementById("a_res").classList.add("selected");
+                var editor = new JsonEditor('#json-display');
+                editor.load(res.res);
+                res = res.res;
                 
                 //Success
                 if(res.header.result_code == '00') {
@@ -187,7 +254,7 @@
 
                 //Fail
                 } else {
-                    //TODO Something
+                    //Do Something
                     alert(res.header.result_msg);
 
                 }
@@ -205,7 +272,7 @@
             playType = playType.options[playType.selectedIndex].value;
 
             let playerDiv = document.getElementById("div_player");
-            console.log(playerDiv.innerHTML);
+            //console.log(playerDiv.innerHTML);
             
             let playerHtml = "";
 
@@ -241,8 +308,48 @@
         }
 
         function deletePlayer(sThis) {
-            console.log(sThis)
+            //console.log(sThis)
             sThis.parentNode.remove();
+        }
+
+        function addField() {
+            let fieldDiv = document.getElementById("div_field");
+            //console.log(fieldDiv.innerHTML);
+            
+            let fieldHtml = "";
+
+            let fieldNameDiv = document.createElement('div');
+            fieldNameDiv.className  = 'li';
+            fieldNameDiv.setAttribute('name', "fieldList");
+
+            fieldHtml += "<input class='input1' placeholder='fieldName' />";
+            fieldHtml += "<input class='input1' placeholder='fieldValue' />";
+
+
+            fieldHtml += "<input type='button' class='input1 delete' value='Delete' onclick='deletePlayer(this)' />"
+
+            fieldNameDiv.innerHTML = fieldHtml;
+            // playerDiv.innerHTML = playerHtml;
+
+            fieldDiv.appendChild(fieldNameDiv);
+        }
+
+        function addCustomer() {
+            let customerOuterDiv = document.getElementById("div_customer");
+            let customerHtml = "";
+
+            let customerDiv = document.createElement('div');
+            customerDiv.className  = 'li';
+            customerDiv.setAttribute('name', "customerList");
+
+            customerHtml += "<input class='input1' placeholder='email' />";
+            customerHtml += "<input class='input1' placeholder='name' />";
+
+            customerHtml += "<input type='button' class='input1 delete' value='Delete' onclick='deletePlayer(this)' />"
+
+            customerDiv.innerHTML = customerHtml;
+
+            customerOuterDiv.appendChild(customerDiv);
         }
     </script>
     
@@ -253,42 +360,37 @@
             <img src="http://jc1.co.kr/image/logo_e.png" style="vertical-align:middle;width: 45px;margin-bottom: 10;"/>
             <label class="subject1">eSignon 비대면 서식 시작 테스트</label>
             <div><a class="subject2" href="https://github.com/eSignon/esignonapi-js#1-%EC%9D%B8%EC%A6%9D%ED%86%A0%ED%81%B0%EB%B0%9C%ED%96%89" target="_blank">Go eSignon API Javascript Library</a></div>
-            <div><a class="subject2" href="https://app.gitbook.com/@jc1jedoc/s/esignon/workflow/start/nonfacestart" target="_blank">Go Rest API Documents</a></div>
+            <div><a class="subject2" href="https://api.esignon.net/workflow/start/nonfacestart" target="_blank">Go Rest API Documents</a></div>
             <div><a class="subject2" href="https://github.com/eSignon/esignonapi-js/blob/master/demo/start_nonface_workflow.html" target="_blank">Go View Source</a></div>
         </div>
     </div>
     <div style="display: inline-block;">
+        <ul class="ul" style="list-style: none;color: red;">
+            <li>✽표시는 필수 입력값입니다.</li>
+        </ul>
         <ul class="ul">
             <li class="li">
-                <span class="title">인증토큰(accessToken)</span>
+                <span class="title"><label style="color:red">✽</label>인증토큰(accessToken)</span>
                 <input id="accessToken" class="input" value=""/>
             </li>
             <li class="li">
-                <span class="title">회사 아이디(companyId)</span>
+                <span class="title"><label style="color:red">✽</label>회사 아이디(companyId)</span>
                 <input id="companyId" class="input" value="testapi"/>
             </li>
             <li class="li">
-                <span class="title">보내는사람 이메일(이싸인온 가입자)</span>
-                <input id="email"" class="input" value=""/>
+                <span class="title"><label style="color:red">✽</label>보내는사람 이메일(senderEmail)</span>
+                <input id="email" class="input" value=""/>
             </li>
             <li class="li">
-                <span class="title">보내는 문서(계약)명</span>
+                <span class="title"><label style="color:red">✽</label>보내는 문서(계약)명(workflowName)</span>
                 <input id="workflowName" class="input" value=""/>
             </li>
             <li class="li">
-                <span class="title">서식아이디(docId)</span>
+                <span class="title"><label style="color:red">✽</label>서식아이디(docId)</span>
                 <input id="docId" class="input" value="1"/>
             </li>
             <li class="li">
-                <span class="title">언어(language)</span>
-                <select id="language" class="input">
-                    <option value="ko">한국어(ko)</option>
-                    <option value="en">English(en)</option>
-                    <option value="ja">日本語(ja)</option>
-                </select>
-            </li>
-            <li class="li">
-                <span class="title">문서 작성자(playerList)</span>
+                <span class="title"><label style="color:red">✽</label>문서 작성자(playerList)</span>
                 <select id="slct_play_type" class="input">
                     <option value="SetPlayer">기본(SetPlayer)</option>
                     <option value="SetPlayerCertMobile">휴대폰본인인증(SetPlayerCertMobile)</option>
@@ -296,7 +398,30 @@
                     <option value="SetPlayerCertMobilePassword">휴대폰본인인증 + 비밀번호인증(SetPlayerCertMobilePassword)</option>
                 </select>
                 <button id="btn_addPlayer" class="btn call add">작성자 추가</button>
-                <div id="div_player" class="li1"></div>
+                <span id="div_player"></span>
+            </li>
+            <li class="li">
+                <span class="title">전달메시지(comment)</span>
+                <input id="comment" class="input" value=""/>
+            </li>
+            <li class="li">
+                <span class="title">박스 초기값(fieldList)</span>
+                <button id="btn_addField" class="btn call add">박스 입력값 추가</button>
+                <span id="div_field"></span>
+            </li>
+            <li class="li">
+                <span class="title">참조자(customerList)</span>
+                <button id="btn_addCustomer" class="btn call add">참조자 추가</button>
+                <span id="div_customer"></span>
+            </li>
+            <li class="li">
+                <span class="title">언어(language)</span>
+                <select id="language" class="input">
+                    <option value="">선택(미선택시 한국어)</option>
+                    <option value="ko-KR">한국어(ko-KR)</option>
+                    <option value="en-US">English(en-US)</option>
+                    <option value="ja-JP">日本語(ja-JP)</option>
+                </select>
             </li>
             <li class="li" style="list-style-type: none;padding: 0px;float: right;">
                 <button id="btn_startWorkflow" class="btn call">비대면 계약 시작하기</button>
@@ -305,7 +430,12 @@
     </div>
 
     <div>
-        <span class="result">Response</span>
+        <span class="result">
+            <a id="a_req">Request</a>
+        </span>
+        <span class="result" style="margin-left: 20px;">
+            <a id="a_res">Response</a>
+        </span>
         <pre id="json-display" style="padding-left: 20px;"></pre>
     </div>
 

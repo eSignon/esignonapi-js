@@ -31,7 +31,7 @@
 
         .title {
             color: #fff;
-            width: 345px;
+            width: 375px;
             display: inline-block;
         }
 
@@ -83,6 +83,14 @@
             margin-left: 50px;
         }
 
+        .selected {
+            color: #ffeb3b;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
     </style>
 
     <!-- AXIOS REST API Library [TK Yoon 2020-06-26 08:59:11] -->
@@ -95,13 +103,32 @@
     <script src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
 
     <!-- eSignon API Javascript Library. download to use https://github.com/eSignon/esignonapi-js/dist/esignonapi-js.js [TK Yoon 2020-06-26 08:59:11] -->
-    <!-- <script src="https://raw.githack.com/eSignon/esignonapi-js/master/src/esignonapi-js.js"></script> -->
-    <script src="https://rawcdn.githack.com/eSignon/esignonapi-js/312356d3a7ba1d2a197a54f1c134e907e91f1ce6/src/esignonapi-js.js"></script>
+    <script src="https://rawcdn.githack.com/eSignon/esignonapi-js/8c33df363a50afe0e925e6bf865b7c2e924b674c/src/esignonapi-js.js"></script>
 
     <script>
+
+        var returnData;
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("btn_getAccessToken").onclick = function(){
                 getEsignonAccessToken();
+            };
+
+            //Request 클릭
+            document.getElementById("a_req").onclick = function() {
+                document.getElementById("a_res").classList.remove("selected");
+                document.getElementById("a_req").classList.add("selected");
+
+                var editor = new JsonEditor('#json-display');
+                editor.load(returnData.req);
+            };
+
+            //Response 클릭
+            document.getElementById("a_res").onclick = function() {
+                document.getElementById("a_req").classList.remove("selected");
+                document.getElementById("a_res").classList.add("selected");
+
+                var editor = new JsonEditor('#json-display');
+                editor.load(returnData.res);
             };
         }, false);
 
@@ -117,13 +144,18 @@
                 language = language.options[language.selectedIndex].value;
 
                 //API 호출
-                const res = await getAccessToken(companyId, email, password, language);
+                let res = await getAccessToken(companyId, email, password, language);
 
                 //결과값
-                console.log('res', res);
+                //console.log('res', res);
+                returnData = res;
 
                 var editor =new JsonEditor('#json-display');
-                editor.load(res);
+                editor.load(res.res);
+                document.getElementById("a_req").classList.remove("selected");
+                document.getElementById("a_res").classList.add("selected");
+
+                res = res.res;
                 
                 //Success
                 if(res.header.result_code == '00') {
@@ -132,7 +164,7 @@
 
                 //Fail
                 } else {
-                    //TODO Something
+                    //Do Something
                     alert(res.header.result_msg);
 
                 }
@@ -152,30 +184,33 @@
             <img src="http://jc1.co.kr/image/logo_e.png" style="vertical-align:middle;width: 45px;margin-bottom: 10;"/>
             <label class="subject1">eSignon 인증토큰 발급 테스트</label>
             <div><a class="subject2" href="https://github.com/eSignon/esignonapi-js#1-%EC%9D%B8%EC%A6%9D%ED%86%A0%ED%81%B0%EB%B0%9C%ED%96%89" target="_blank">Go eSignon API Javascript Library</a></div>
-            <div><a class="subject2" href="https://app.gitbook.com/@jc1jedoc/s/esignon/issued/token" target="_blank">Go Rest API Documents</a></div>
+            <div><a class="subject2" href="https://api.esignon.net/issued/token" target="_blank">Go Rest API Documents</a></div>
             <div><a class="subject2" href="https://github.com/eSignon/esignonapi-js/blob/master/demo/demo_access_token.html" target="_blank">Go View Source</a></div>
         </div>
     </div>
     <div style="display: inline-block;">
+        <ul class="ul" style="list-style: none;color: red;">
+            <li>✽표시는 필수 입력값입니다.</li>
+        </ul>
         <ul class="ul">
             <li class="li">
-                <span class="title">회사 아이디(companyId)</span>
+                <span class="title"><label style="color:red">✽</label>회사 아이디(companyId)</span>
                 <input id="companyId" class="input" value="testapi"/>
             </li>
             <li class="li">
-                <span class="title">이싸인온 가입 이메일(email)</span>
+                <span class="title"><label style="color:red">✽</label>이싸인온 가입 이메일(email)</span>
                 <input id="email" class="input" value=""/>
             </li>
             <li class="li">
-                <span class="title">이싸인온 아이디 비밀번호(password)</span>
+                <span class="title"><label style="color:red">✽</label>이싸인온 아이디 비밀번호(password)</span>
                 <input id="password" class="input" value=""/>
             </li>
             <li class="li">
                 <span class="title">언어(language)</span>
                 <select id="language" class="input">
-                    <option value="ko">한국어(ko)</option>
-                    <option value="en">English(en)</option>
-                    <option value="ja">日本語(ja)</option>
+                    <option value="ko-KR">한국어(ko-KR)</option>
+                    <option value="en-US">English(en-US)</option>
+                    <option value="ja-JP">日本語(ja-JP)</option>
                 </select>
             </li>
             <li class="li" style="list-style-type: none;padding: 0px;float: right;">
@@ -185,7 +220,12 @@
     </div>
 
     <div>
-        <span class="result">Response</span>
+        <span class="result">
+            <a id="a_req">Request</a>
+        </span>
+        <span class="result" style="margin-left: 20px;">
+            <a id="a_res">Response</a>
+        </span>
         <pre id="json-display" style="padding-left: 20px;"></pre>
     </div>
 
